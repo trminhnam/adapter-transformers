@@ -25,17 +25,6 @@ from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, LayerNorm, MSELoss
 from torch.nn import functional as F
 
 from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward
-from ...adapters.composition import adjust_tensors_for_parallel
-from ...adapters.context import ForwardContext
-from ...adapters.lora import Linear as LoRALinear
-from ...adapters.lora import MergedLinear as LoRAMergedLinear
-from ...adapters.mixins.bloom import (
-    BloomDecoderBlockAdaptersMixin, 
-    BloomModelAdapterMixin, 
-    BloomModelWithHeadsAdaptersMixin,
-)
-from ...adapters.model_mixin import ModelWithHeadsAdaptersMixin
-# from ...adapters.prefix_tuning import PrefixTuningShim
 from ...modeling_outputs import (
     BaseModelOutputWithPastAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
@@ -52,7 +41,6 @@ logger = logging.get_logger(__name__)
 
 _CHECKPOINT_FOR_DOC = "bigscience/bloom-560m"
 _CONFIG_FOR_DOC = "BloomConfig"
-_TOKENIZER_FOR_DOC = "BloomTokenizerFast"
 
 BLOOM_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "bigscience/bigscience-small-testing",
@@ -154,7 +142,7 @@ def dropout_add(x: torch.Tensor, residual: torch.Tensor, prob: float, training: 
             training mode
     """
     out = F.dropout(x, p=prob, training=training)
-    # out = residual + out
+    out = residual + out
     return out
 
 
@@ -243,13 +231,7 @@ class BloomAttention(nn.Module):
         self.inv_norm_factor = 1.0 / math.sqrt(self.head_dim)
         self.beta = 1.0
 
-        self.query_key_value = LoRAMergedLinear(
-                self.hidden_size,
-                3 * self.hidden_size,
-                "selfattn",
-                config,
-                bias=True
-        )
+        self.query_key_value = nn.Linear(self.hidden_size, 3 * self.hidden_size, bias=True)
         self.dense = nn.Linear(self.hidden_size, self.hidden_size)
         self.attention_dropout = nn.Dropout(config.attention_dropout)
 
@@ -393,9 +375,9 @@ class BloomMLP(nn.Module):
 
         self.pretraining_tp = config.pretraining_tp
         self.slow_but_exact = config.slow_but_exact
-        self.dense_h_to_4h = LoRALinear(hidden_size, 4 * hidden_size, "intermediate", config)
+        self.dense_h_to_4h = nn.Linear(hidden_size, 4 * hidden_size)
         self.gelu_impl = BloomGelu()
-        self.dense_4h_to_h = LoRALinear(4 * hidden_size, hidden_size, "output", config)
+        self.dense_4h_to_h = nn.Linear(4 * hidden_size, hidden_size)
         self.hidden_dropout = config.hidden_dropout
 
     def forward(self, hidden_states: torch.Tensor, residual: torch.Tensor) -> torch.Tensor:
@@ -417,10 +399,9 @@ class BloomMLP(nn.Module):
         return output
 
 
-class BloomBlock(BloomDecoderBlockAdaptersMixin, nn.Module):
+class BloomBlock(nn.Module):
     def __init__(self, config: BloomConfig):
         super().__init__()
-        self.config = config
         hidden_size = config.hidden_size
 
         self.input_layernorm = LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
@@ -432,8 +413,6 @@ class BloomBlock(BloomDecoderBlockAdaptersMixin, nn.Module):
 
         self.apply_residual_connection_post_layernorm = config.apply_residual_connection_post_layernorm
         self.hidden_dropout = config.hidden_dropout
-
-        self._init_adapter_modules()
 
     def forward(
         self,
@@ -472,8 +451,6 @@ class BloomBlock(BloomDecoderBlockAdaptersMixin, nn.Module):
 
         outputs = attn_outputs[1:]
 
-        attention_output = self.attention_adapters(attention_output, residual, None)
-
         layernorm_output = self.post_attention_layernorm(attention_output)
 
         # Get residual
@@ -484,7 +461,6 @@ class BloomBlock(BloomDecoderBlockAdaptersMixin, nn.Module):
 
         # MLP.
         output = self.mlp(layernorm_output, residual)
-        output = self.output_adapters(output, residual, None)
 
         if use_cache:
             outputs = (output,) + outputs
@@ -593,7 +569,7 @@ BLOOM_INPUTS_DOCSTRING = r"""
             If `past_key_values` is used, only `input_ids` that do not have their past calculated should be passed as
             `input_ids`.
 
-            Indices can be obtained using [`AutoTokenizer`] or [`BloomTokenizerFast`]. See [`PreTrainedTokenizer.encode`] and
+            Indices can be obtained using [`AutoTokenizer`]. See [`PreTrainedTokenizer.encode`] and
             [`PreTrainedTokenizer.__call__`] for details.
 
             [What are input IDs?](../glossary#input-ids)
@@ -643,7 +619,7 @@ BLOOM_INPUTS_DOCSTRING = r"""
     "The bare Bloom Model transformer outputting raw hidden-states without any specific head on top.",
     BLOOM_START_DOCSTRING,
 )
-class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
+class BloomModel(BloomPreTrainedModel):
     def __init__(self, config: BloomConfig):
         super().__init__(config)
 
@@ -661,8 +637,6 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
         self.ln_f = LayerNorm(self.embed_dim, eps=config.layer_norm_epsilon)
 
         self.gradient_checkpointing = False
-
-        self._init_adapter_modules()
 
         # Initialize weights and apply final processing
         self.post_init()
@@ -697,12 +671,10 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
 
     @add_start_docstrings_to_model_forward(BLOOM_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
-        processor_class=_TOKENIZER_FOR_DOC,
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=BaseModelOutputWithPastAndCrossAttentions,
         config_class=_CONFIG_FOR_DOC,
     )
-    @ForwardContext.wrap
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -724,8 +696,7 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
                 FutureWarning,
             )
         if len(deprecated_arguments) > 0:
-            # raise ValueError(f"Got unexpected arguments: {deprecated_arguments}")
-            print(f"Got unexpected arguments: {deprecated_arguments}")
+            raise ValueError(f"Got unexpected arguments: {deprecated_arguments}")
 
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
@@ -755,7 +726,6 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
         if inputs_embeds is None:
             inputs_embeds = self.word_embeddings(input_ids)
 
-        inputs_embeds = self.invertible_adapters_forward(inputs_embeds)
         hidden_states = self.word_embeddings_layernorm(inputs_embeds)
 
         presents = () if use_cache else None
@@ -850,7 +820,7 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForCausalLM(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForCausalLM(BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -891,7 +861,6 @@ class BloomForCausalLM(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
 
     @add_start_docstrings_to_model_forward(BLOOM_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
-        processor_class=_TOKENIZER_FOR_DOC,
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=CausalLMOutputWithCrossAttentions,
         config_class=_CONFIG_FOR_DOC,
@@ -1008,7 +977,7 @@ class BloomForCausalLM(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForSequenceClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForSequenceClassification(BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -1022,7 +991,6 @@ class BloomForSequenceClassification(ModelWithHeadsAdaptersMixin, BloomPreTraine
 
     @add_start_docstrings_to_model_forward(BLOOM_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
-        processor_class=_TOKENIZER_FOR_DOC,
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=SequenceClassifierOutputWithPast,
         config_class=_CONFIG_FOR_DOC,
@@ -1137,7 +1105,7 @@ class BloomForSequenceClassification(ModelWithHeadsAdaptersMixin, BloomPreTraine
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForTokenClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForTokenClassification(BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -1159,7 +1127,6 @@ class BloomForTokenClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedMo
 
     @add_start_docstrings_to_model_forward(BLOOM_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
-        processor_class=_TOKENIZER_FOR_DOC,
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=TokenClassifierOutput,
         config_class=_CONFIG_FOR_DOC,
@@ -1239,7 +1206,7 @@ class BloomForTokenClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedMo
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForQuestionAnswering(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForQuestionAnswering(BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config):

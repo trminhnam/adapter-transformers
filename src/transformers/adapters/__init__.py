@@ -144,6 +144,10 @@ _import_structure = {
         "get_adapter_info",
         "list_adapters",
     ],
+    "models.bloom": [
+        "BloomAdapterModel",
+        "BloomModelWithHeads",
+    ],
 }
 
 
@@ -233,6 +237,9 @@ if TYPE_CHECKING:
         get_adapter_info,
         list_adapters,
     )
+    
+    from .models.bloom import BloomAdapterModel, BloomModelWithHeads
+
 
 else:
     import sys

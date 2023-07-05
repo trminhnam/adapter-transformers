@@ -509,6 +509,30 @@ STATIC_TO_FLEX_HEAD_MAP = {
         },
         "layers": [None, "classifier"],
     },
+    # Bloom
+    "BloomForSequenceClassification": {
+        "config": {
+            "head_type": "classification",
+            "layers": 1,
+            "activation_function": None,
+            "bias": False,
+        },
+        "layers": [None, "score"],
+    },
+    "BloomLMHeadModel": {
+        "config": {
+            "head_type": "causal_lm",
+        },
+        "layers": ["lm_head"],
+    },
+    "BloomForTokenClassification": {
+        "config": {
+            "head_type": "tagging",
+            "layers": 1,
+            "activation_function": None,
+        },
+        "layers": [None, "classifier"],
+    },
 }
 
 
