@@ -26,8 +26,10 @@ logger = logging.get_logger(__name__)
 class DeiTFeatureExtractor(DeiTImageProcessor):
     def __init__(self, *args, **kwargs) -> None:
         warnings.warn(
-            "The class DeiTFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please"
-            " use DeiTImageProcessor instead.",
+            (
+                "The class DeiTFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please"
+                " use DeiTImageProcessor instead."
+            ),
             FutureWarning,
         )
         super().__init__(*args, **kwargs)

@@ -2246,11 +2246,11 @@ class OneFormerTransformerDecoder(nn.Module):
             contrastive_logits=contrastive_logits,
             prediction_masks=intermediate_mask_predictions[-1],
             prediction_class=intermediate_class_predictions[-1],
-            auxiliary_predictions=self._get_aux_predictions(
-                intermediate_class_predictions, intermediate_mask_predictions
-            )
-            if self.use_auxiliary_loss
-            else None,
+            auxiliary_predictions=(
+                self._get_aux_predictions(intermediate_class_predictions, intermediate_mask_predictions)
+                if self.use_auxiliary_loss
+                else None
+            ),
             attentions=attentions,
         )
 

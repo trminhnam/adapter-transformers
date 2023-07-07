@@ -209,7 +209,6 @@ class ViTMAEModelTest(ModelTesterMixin, unittest.TestCase):
     # overwrite from common since ViTMAEForPretraining has random masking, we need to fix the noise
     # to generate masks during test
     def check_pt_tf_models(self, tf_model, pt_model, pt_inputs_dict):
-
         # make masks reproducible
         np.random.seed(2)
 
@@ -224,7 +223,6 @@ class ViTMAEModelTest(ModelTesterMixin, unittest.TestCase):
         super().check_pt_tf_models(tf_model, pt_model, pt_inputs_dict)
 
     def test_save_load(self):
-
         config, inputs_dict = self.model_tester.prepare_config_and_inputs_for_common()
 
         for model_class in self.all_model_classes:
@@ -254,24 +252,18 @@ class ViTMAEModelTest(ModelTesterMixin, unittest.TestCase):
                 max_diff = np.amax(np.abs(out_1 - out_2))
                 self.assertLessEqual(max_diff, 1e-5)
 
-    @unittest.skip(
-        reason="""ViTMAE returns a random mask + ids_restore in each forward pass. See test_save_load
-    to get deterministic results."""
-    )
+    @unittest.skip(reason="""ViTMAE returns a random mask + ids_restore in each forward pass. See test_save_load
+    to get deterministic results.""")
     def test_determinism(self):
         pass
 
-    @unittest.skip(
-        reason="""ViTMAE returns a random mask + ids_restore in each forward pass. See test_save_load
-    to get deterministic results."""
-    )
+    @unittest.skip(reason="""ViTMAE returns a random mask + ids_restore in each forward pass. See test_save_load
+    to get deterministic results.""")
     def test_save_load_fast_init_from_base(self):
         pass
 
-    @unittest.skip(
-        reason="""ViTMAE returns a random mask + ids_restore in each forward pass. See test_save_load
-    to get deterministic results."""
-    )
+    @unittest.skip(reason="""ViTMAE returns a random mask + ids_restore in each forward pass. See test_save_load
+    to get deterministic results.""")
     def test_save_load_fast_init_to_base(self):
         pass
 

@@ -826,7 +826,6 @@ class TFFlaubertWithLMHeadModel(TFFlaubertPreTrainedModel):
         return_dict: Optional[bool] = None,
         training: Optional[bool] = False,
     ) -> Union[Tuple, TFFlaubertWithLMHeadModelOutput]:
-
         transformer_outputs = self.transformer(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1217,8 +1216,10 @@ class TFFlaubertForMultipleChoice(TFFlaubertPreTrainedModel, TFMultipleChoiceLos
 
         if lengths is not None:
             logger.warning(
-                "The `lengths` parameter cannot be used with the Flaubert multiple choice models. Please use the "
-                "attention mask instead.",
+                (
+                    "The `lengths` parameter cannot be used with the Flaubert multiple choice models. Please use the "
+                    "attention mask instead."
+                ),
             )
             lengths = None
 

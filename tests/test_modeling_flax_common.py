@@ -134,9 +134,11 @@ class FlaxModelTesterMixin:
         # hack for now until we have AutoModel classes
         if "ForMultipleChoice" in model_class.__name__:
             inputs_dict = {
-                k: jnp.broadcast_to(v[:, None], (v.shape[0], self.model_tester.num_choices, v.shape[-1]))
-                if isinstance(v, (jnp.ndarray, np.ndarray))
-                else v
+                k: (
+                    jnp.broadcast_to(v[:, None], (v.shape[0], self.model_tester.num_choices, v.shape[-1]))
+                    if isinstance(v, (jnp.ndarray, np.ndarray))
+                    else v
+                )
                 for k, v in inputs_dict.items()
             }
 

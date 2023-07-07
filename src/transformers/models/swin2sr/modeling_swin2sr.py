@@ -418,9 +418,11 @@ class Swin2SRAttention(nn.Module):
             dim=dim,
             num_heads=num_heads,
             window_size=window_size,
-            pretrained_window_size=pretrained_window_size
-            if isinstance(pretrained_window_size, collections.abc.Iterable)
-            else (pretrained_window_size, pretrained_window_size),
+            pretrained_window_size=(
+                pretrained_window_size
+                if isinstance(pretrained_window_size, collections.abc.Iterable)
+                else (pretrained_window_size, pretrained_window_size)
+            ),
         )
         self.output = Swin2SRSelfOutput(config, dim)
         self.pruned_heads = set()
@@ -499,9 +501,11 @@ class Swin2SRLayer(nn.Module):
             dim=dim,
             num_heads=num_heads,
             window_size=self.window_size,
-            pretrained_window_size=pretrained_window_size
-            if isinstance(pretrained_window_size, collections.abc.Iterable)
-            else (pretrained_window_size, pretrained_window_size),
+            pretrained_window_size=(
+                pretrained_window_size
+                if isinstance(pretrained_window_size, collections.abc.Iterable)
+                else (pretrained_window_size, pretrained_window_size)
+            ),
         )
         self.layernorm_before = nn.LayerNorm(dim, eps=config.layer_norm_eps)
         self.drop_path = Swin2SRDropPath(config.drop_path_rate) if config.drop_path_rate > 0.0 else nn.Identity()

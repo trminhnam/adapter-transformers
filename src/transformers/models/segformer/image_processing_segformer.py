@@ -100,8 +100,10 @@ class SegformerImageProcessor(BaseImageProcessor):
     ) -> None:
         if "reduce_labels" in kwargs:
             warnings.warn(
-                "The `reduce_labels` parameter is deprecated and will be removed in a future version. Please use "
-                "`do_reduce_labels` instead.",
+                (
+                    "The `reduce_labels` parameter is deprecated and will be removed in a future version. Please use "
+                    "`do_reduce_labels` instead."
+                ),
                 FutureWarning,
             )
             do_reduce_labels = kwargs.pop("reduce_labels")
@@ -122,8 +124,10 @@ class SegformerImageProcessor(BaseImageProcessor):
     @property
     def reduce_labels(self):
         warnings.warn(
-            "The `reduce_labels` property is deprecated and will be removed in a v4.27. Please use "
-            "`do_reduce_labels` instead.",
+            (
+                "The `reduce_labels` property is deprecated and will be removed in a v4.27. Please use "
+                "`do_reduce_labels` instead."
+            ),
             FutureWarning,
         )
         return self.do_reduce_labels

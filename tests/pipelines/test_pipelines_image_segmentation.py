@@ -172,15 +172,19 @@ class ImageSegmentationPipelineTests(unittest.TestCase, metaclass=PipelineTestCa
             pipe("http://images.cocodataset.org/val2017/000000039769.jpg", subtask="panoptic")
         self.assertEqual(
             str(e.exception),
-            "Subtask panoptic is not supported for model <class"
-            " 'transformers.models.mobilevit.modeling_mobilevit.MobileViTForSemanticSegmentation'>",
+            (
+                "Subtask panoptic is not supported for model <class"
+                " 'transformers.models.mobilevit.modeling_mobilevit.MobileViTForSemanticSegmentation'>"
+            ),
         )
         with self.assertRaises(ValueError) as e:
             pipe("http://images.cocodataset.org/val2017/000000039769.jpg", subtask="instance")
         self.assertEqual(
             str(e.exception),
-            "Subtask instance is not supported for model <class"
-            " 'transformers.models.mobilevit.modeling_mobilevit.MobileViTForSemanticSegmentation'>",
+            (
+                "Subtask instance is not supported for model <class"
+                " 'transformers.models.mobilevit.modeling_mobilevit.MobileViTForSemanticSegmentation'>"
+            ),
         )
 
     @require_torch

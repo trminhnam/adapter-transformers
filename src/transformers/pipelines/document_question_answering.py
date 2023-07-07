@@ -459,9 +459,9 @@ class DocumentQuestionAnsweringPipeline(ChunkPipeline):
                 start=output["start_logits"],
                 end=output["end_logits"],
                 p_mask=output["p_mask"],
-                attention_mask=output["attention_mask"].numpy()
-                if output.get("attention_mask", None) is not None
-                else None,
+                attention_mask=(
+                    output["attention_mask"].numpy() if output.get("attention_mask", None) is not None else None
+                ),
                 min_null_score=min_null_score,
                 top_k=top_k,
                 handle_impossible_answer=handle_impossible_answer,

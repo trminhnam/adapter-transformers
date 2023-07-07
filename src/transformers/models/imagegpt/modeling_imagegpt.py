@@ -694,8 +694,10 @@ class ImageGPTModel(ImageGPTPreTrainedModel):
 
         if "pixel_values" in kwargs:
             warnings.warn(
-                "The `pixel_values` argument is deprecated and will be removed in a future version, use `input_ids`"
-                " instead.",
+                (
+                    "The `pixel_values` argument is deprecated and will be removed in a future version, use"
+                    " `input_ids` instead."
+                ),
                 FutureWarning,
             )
 
@@ -796,7 +798,6 @@ class ImageGPTModel(ImageGPTPreTrainedModel):
         all_cross_attentions = () if output_attentions and self.config.add_cross_attention else None
         all_hidden_states = () if output_hidden_states else None
         for i, (block, layer_past) in enumerate(zip(self.h, past_key_values)):
-
             # Model parallel
             if self.model_parallel:
                 torch.cuda.set_device(hidden_states.device)
@@ -812,7 +813,6 @@ class ImageGPTModel(ImageGPTPreTrainedModel):
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
@@ -1006,8 +1006,10 @@ class ImageGPTForCausalImageModeling(ImageGPTPreTrainedModel):
 
         if "pixel_values" in kwargs:
             warnings.warn(
-                "The `pixel_values` argument is deprecated and will be removed in a future version, use `input_ids`"
-                " instead.",
+                (
+                    "The `pixel_values` argument is deprecated and will be removed in a future version, use"
+                    " `input_ids` instead."
+                ),
                 FutureWarning,
             )
 
@@ -1139,8 +1141,10 @@ class ImageGPTForImageClassification(ImageGPTPreTrainedModel):
 
         if "pixel_values" in kwargs:
             warnings.warn(
-                "The `pixel_values` argument is deprecated and will be removed in a future version, use `input_ids`"
-                " instead.",
+                (
+                    "The `pixel_values` argument is deprecated and will be removed in a future version, use"
+                    " `input_ids` instead."
+                ),
                 FutureWarning,
             )
 

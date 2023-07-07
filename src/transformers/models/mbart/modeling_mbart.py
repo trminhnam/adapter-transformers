@@ -1107,7 +1107,6 @@ class MBartDecoder(MBartPreTrainedModel):
             past_key_value = past_key_values[idx] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing`. Setting `use_cache=False`..."
@@ -1132,7 +1131,6 @@ class MBartDecoder(MBartPreTrainedModel):
                     None,
                 )
             else:
-
                 layer_outputs = decoder_layer(
                     hidden_states,
                     attention_mask=attention_mask,
@@ -1743,7 +1741,6 @@ class MBartDecoderWrapper(BartModelAdaptersMixin, MBartPreTrainedModel):
 
     @ForwardContext.wrap
     def forward(self, *args, **kwargs):
-
         return self.decoder(*args, **kwargs)
 
     def get_input_embeddings(self) -> nn.Module:

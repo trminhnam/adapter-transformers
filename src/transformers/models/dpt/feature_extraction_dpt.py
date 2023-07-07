@@ -26,8 +26,10 @@ logger = logging.get_logger(__name__)
 class DPTFeatureExtractor(DPTImageProcessor):
     def __init__(self, *args, **kwargs) -> None:
         warnings.warn(
-            "The class DPTFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please"
-            " use DPTImageProcessor instead.",
+            (
+                "The class DPTFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please"
+                " use DPTImageProcessor instead."
+            ),
             FutureWarning,
         )
         super().__init__(*args, **kwargs)

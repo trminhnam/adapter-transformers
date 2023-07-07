@@ -113,10 +113,12 @@ class TFTrainer:
         self.eval_loss = tf.keras.metrics.Sum()
 
         warnings.warn(
-            "The class `TFTrainer` is deprecated and will be removed in version 5 of Transformers. "
-            "We recommend using native Keras instead, by calling methods like `fit()` and `predict()` "
-            "directly on the model object. Detailed examples of the Keras style can be found in our "
-            "examples at https://github.com/huggingface/transformers/tree/main/examples/tensorflow",
+            (
+                "The class `TFTrainer` is deprecated and will be removed in version 5 of Transformers. "
+                "We recommend using native Keras instead, by calling methods like `fit()` and `predict()` "
+                "directly on the model object. Detailed examples of the Keras style can be found in our "
+                "examples at https://github.com/huggingface/transformers/tree/main/examples/tensorflow"
+            ),
             FutureWarning,
         )
 
@@ -140,7 +142,6 @@ class TFTrainer:
                 "To use comet_ml logging, run `pip/conda install comet_ml` "
                 "see https://www.comet.ml/docs/python-sdk/huggingface/"
             )
-
         enable_full_determinism(self.args.seed) if self.args.full_determinism else set_seed(self.args.seed)
 
     def get_train_tfdataset(self) -> tf.data.Dataset:
@@ -462,7 +463,6 @@ class TFTrainer:
 
     @tf.function
     def distributed_prediction_steps(self, batch):
-
         nb_instances_in_batch = self._compute_nb_instances(batch)
         inputs = self._get_step_inputs(batch, nb_instances_in_batch)
 
@@ -516,7 +516,6 @@ class TFTrainer:
             epochs_trained = 0
             steps_trained_in_current_epoch = 0
             if self.model.ckpt_manager.latest_checkpoint:
-
                 logger.info(
                     f"Checkpoint file {self.model.ckpt_manager.latest_checkpoint} found and restoring from checkpoint"
                 )
@@ -560,7 +559,6 @@ class TFTrainer:
                     self._past = None
 
                 for step, batch in enumerate(train_ds):
-
                     # Skip past any already trained steps if resuming training
                     if steps_trained_in_current_epoch > 0:
                         steps_trained_in_current_epoch -= 1
@@ -704,7 +702,6 @@ class TFTrainer:
     @tf.function
     def distributed_training_steps(self, batch):
         with self.args.strategy.scope():
-
             nb_instances_in_batch = self._compute_nb_instances(batch)
             inputs = self._get_step_inputs(batch, nb_instances_in_batch)
 
@@ -712,7 +709,6 @@ class TFTrainer:
 
     @staticmethod
     def _compute_nb_instances(batch):
-
         labels = batch[-1]
         if isinstance(labels, PerReplica):
             labels = tf.concat(labels.values, axis=0)
@@ -723,7 +719,6 @@ class TFTrainer:
 
     @staticmethod
     def _get_step_inputs(batch, nb_instances):
-
         features, labels = batch
 
         if isinstance(labels, PerReplica):

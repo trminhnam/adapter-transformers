@@ -61,7 +61,7 @@ _CONFIG_FOR_DOC = "FNetConfig"
 
 FNET_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "google/fnet-base",
-    "google/fnet-large"
+    "google/fnet-large",
     # See all FNet models at https://huggingface.co/models?filter=fnet
 ]
 
@@ -185,7 +185,6 @@ class FNetBasicFourierTransform(nn.Module):
             self.fourier_transform = fftn
 
     def forward(self, hidden_states):
-
         # NOTE: We do not use torch.vmap as it is not integrated into PyTorch stable versions.
         # Interested users can modify the code to use vmap from the nightly versions, getting the vmap from here:
         # https://pytorch.org/docs/master/generated/torch.vmap.html. Note that fourier transform methods will need
@@ -836,8 +835,10 @@ class FNetForNextSentencePrediction(FNetPreTrainedModel):
 
         if "next_sentence_label" in kwargs:
             warnings.warn(
-                "The `next_sentence_label` argument is deprecated and will be removed in a future version, use"
-                " `labels` instead.",
+                (
+                    "The `next_sentence_label` argument is deprecated and will be removed in a future version, use"
+                    " `labels` instead."
+                ),
                 FutureWarning,
             )
             labels = kwargs.pop("next_sentence_label")

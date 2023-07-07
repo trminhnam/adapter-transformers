@@ -460,9 +460,11 @@ class Wav2Vec2FeatureExtractor(Wav2Vec2FeatureEncoder):
     def __init__(self, config):
         super().__init__(config)
         warnings.warn(
-            f"The class `{self.__class__.__name__}` has been depreciated "
-            "and will be removed in Transformers v5. "
-            f"Use `{self.__class__.__bases__[0].__name__}` instead.",
+            (
+                f"The class `{self.__class__.__name__}` has been depreciated "
+                "and will be removed in Transformers v5. "
+                f"Use `{self.__class__.__bases__[0].__name__}` instead."
+            ),
             FutureWarning,
         )
 
@@ -1216,8 +1218,10 @@ class Wav2Vec2Model(Wav2Vec2PreTrainedModel):
         not be updated during training.
         """
         warnings.warn(
-            "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
-            "Please use the equivalent `freeze_feature_encoder` method instead.",
+            (
+                "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
+                "Please use the equivalent `freeze_feature_encoder` method instead."
+            ),
             FutureWarning,
         )
         self.freeze_feature_encoder()
@@ -1364,8 +1368,10 @@ class Wav2Vec2ForPreTraining(Wav2Vec2PreTrainedModel):
         not be updated during training.
         """
         warnings.warn(
-            "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
-            "Please use the equivalent `freeze_feature_encoder` method instead.",
+            (
+                "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
+                "Please use the equivalent `freeze_feature_encoder` method instead."
+            ),
             FutureWarning,
         )
         self.freeze_feature_encoder()
@@ -1637,8 +1643,10 @@ class Wav2Vec2ForCTC(Wav2Vec2PreTrainedModel):
         not be updated during training.
         """
         warnings.warn(
-            "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
-            "Please use the equivalent `freeze_feature_encoder` method instead.",
+            (
+                "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
+                "Please use the equivalent `freeze_feature_encoder` method instead."
+            ),
             FutureWarning,
         )
         self.freeze_feature_encoder()
@@ -1692,7 +1700,6 @@ class Wav2Vec2ForCTC(Wav2Vec2PreTrainedModel):
 
         loss = None
         if labels is not None:
-
             if labels.max() >= self.config.vocab_size:
                 raise ValueError(f"Label values must be <= vocab_size: {self.config.vocab_size}")
 
@@ -1762,8 +1769,10 @@ class Wav2Vec2ForSequenceClassification(Wav2Vec2PreTrainedModel):
         not be updated during training.
         """
         warnings.warn(
-            "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
-            "Please use the equivalent `freeze_feature_encoder` method instead.",
+            (
+                "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
+                "Please use the equivalent `freeze_feature_encoder` method instead."
+            ),
             FutureWarning,
         )
         self.freeze_feature_encoder()
@@ -1883,8 +1892,10 @@ class Wav2Vec2ForAudioFrameClassification(Wav2Vec2PreTrainedModel):
         not be updated during training.
         """
         warnings.warn(
-            "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
-            "Please use the equivalent `freeze_feature_encoder` method instead.",
+            (
+                "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
+                "Please use the equivalent `freeze_feature_encoder` method instead."
+            ),
             FutureWarning,
         )
         self.freeze_feature_encoder()
@@ -2047,8 +2058,10 @@ class Wav2Vec2ForXVector(Wav2Vec2PreTrainedModel):
         not be updated during training.
         """
         warnings.warn(
-            "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
-            "Please use the equivalent `freeze_feature_encoder` method instead.",
+            (
+                "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
+                "Please use the equivalent `freeze_feature_encoder` method instead."
+            ),
             FutureWarning,
         )
         self.freeze_feature_encoder()

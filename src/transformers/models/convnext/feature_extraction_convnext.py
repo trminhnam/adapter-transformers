@@ -26,8 +26,10 @@ logger = logging.get_logger(__name__)
 class ConvNextFeatureExtractor(ConvNextImageProcessor):
     def __init__(self, *args, **kwargs) -> None:
         warnings.warn(
-            "The class ConvNextFeatureExtractor is deprecated and will be removed in version 5 of Transformers."
-            " Please use ConvNextImageProcessor instead.",
+            (
+                "The class ConvNextFeatureExtractor is deprecated and will be removed in version 5 of Transformers."
+                " Please use ConvNextImageProcessor instead."
+            ),
             FutureWarning,
         )
         super().__init__(*args, **kwargs)

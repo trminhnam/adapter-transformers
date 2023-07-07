@@ -476,16 +476,20 @@ def input_processing(func, config, **kwargs):
 
     if "decoder_cached_states" in kwargs["kwargs_call"]:
         warnings.warn(
-            "The `decoder_cached_states` argument is deprecated and will be removed in a future version, use"
-            " `past_key_values` instead.",
+            (
+                "The `decoder_cached_states` argument is deprecated and will be removed in a future version, use"
+                " `past_key_values` instead."
+            ),
             FutureWarning,
         )
         output["past_key_values"] = kwargs["kwargs_call"].pop("decoder_cached_states")
 
     if "past" in kwargs["kwargs_call"] and "past_key_values" in parameter_names:
         warnings.warn(
-            "The `past` argument is deprecated and will be removed in a future version, use `past_key_values`"
-            " instead.",
+            (
+                "The `past` argument is deprecated and will be removed in a future version, use `past_key_values`"
+                " instead."
+            ),
             FutureWarning,
         )
         kwargs["past_key_values"] = kwargs["kwargs_call"].pop("past")
@@ -530,8 +534,10 @@ def input_processing(func, config, **kwargs):
     elif isinstance(main_input, Mapping):
         if "inputs" in main_input:
             warnings.warn(
-                "The `inputs` argument is deprecated and will be removed in a future version, use `input_ids`"
-                " instead.",
+                (
+                    "The `inputs` argument is deprecated and will be removed in a future version, use `input_ids`"
+                    " instead."
+                ),
                 FutureWarning,
             )
 
@@ -539,8 +545,10 @@ def input_processing(func, config, **kwargs):
 
         if "decoder_cached_states" in main_input:
             warnings.warn(
-                "The `decoder_cached_states` argument is deprecated and will be removed in a future version, use"
-                " `past_key_values` instead.",
+                (
+                    "The `decoder_cached_states` argument is deprecated and will be removed in a future version, use"
+                    " `past_key_values` instead."
+                ),
                 FutureWarning,
             )
             output["past_key_values"] = main_input.pop("decoder_cached_states")
@@ -1450,10 +1458,12 @@ class TFPreTrainedModel(tf.keras.Model, TFModelUtilsMixin, TFGenerationMixin, Pu
             return super().compute_loss(*args, **kwargs)
         else:
             warnings.warn(
-                "The old compute_loss method is deprecated as it conflicts with the Keras compute_loss "
-                "method added in TF 2.8. If you want the original HF compute_loss, please call "
-                "hf_compute_loss() instead. From TF versions >= 2.8, or Transformers versions >= 5, "
-                "calling compute_loss() will get the Keras method instead.",
+                (
+                    "The old compute_loss method is deprecated as it conflicts with the Keras compute_loss "
+                    "method added in TF 2.8. If you want the original HF compute_loss, please call "
+                    "hf_compute_loss() instead. From TF versions >= 2.8, or Transformers versions >= 5, "
+                    "calling compute_loss() will get the Keras method instead."
+                ),
                 FutureWarning,
             )
             return self.hf_compute_loss(*args, **kwargs)
@@ -1501,7 +1511,6 @@ class TFPreTrainedModel(tf.keras.Model, TFModelUtilsMixin, TFGenerationMixin, Pu
         # When using a dummy loss, we ensure that separate labels are copied to the correct model arguments,
         # if those keys are not already present in the input dict
         if self._using_dummy_loss and y is not None:
-
             # If y is a tensor and the model only has one label-like input, map y to that input
             if len(label_kwargs) == 1 and isinstance(y, tf.Tensor):
                 if isinstance(x, tf.Tensor):

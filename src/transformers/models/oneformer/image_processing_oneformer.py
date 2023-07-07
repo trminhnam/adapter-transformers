@@ -415,8 +415,10 @@ class OneFormerImageProcessor(BaseImageProcessor):
 
         if "reduce_labels" in kwargs:
             warnings.warn(
-                "The `reduce_labels` argument is deprecated and will be removed in v4.27. "
-                "Please use `do_reduce_labels` instead.",
+                (
+                    "The `reduce_labels` argument is deprecated and will be removed in v4.27. "
+                    "Please use `do_reduce_labels` instead."
+                ),
                 FutureWarning,
             )
             do_reduce_labels = kwargs.pop("reduce_labels")
@@ -451,8 +453,10 @@ class OneFormerImageProcessor(BaseImageProcessor):
         """
         if "max_size" in kwargs:
             warnings.warn(
-                "The `max_size` parameter is deprecated and will be removed in v4.27. "
-                "Please specify in `size['longest_edge'] instead`.",
+                (
+                    "The `max_size` parameter is deprecated and will be removed in v4.27. "
+                    "Please specify in `size['longest_edge'] instead`."
+                ),
                 FutureWarning,
             )
             max_size = kwargs.pop("max_size")
@@ -628,8 +632,10 @@ class OneFormerImageProcessor(BaseImageProcessor):
             )
         if "reduce_labels" in kwargs:
             warnings.warn(
-                "The `reduce_labels` argument is deprecated and will be removed in a v4.27. Please use"
-                " `do_reduce_labels` instead.",
+                (
+                    "The `reduce_labels` argument is deprecated and will be removed in a v4.27. Please use"
+                    " `do_reduce_labels` instead."
+                ),
                 FutureWarning,
             )
             if do_reduce_labels is not None:

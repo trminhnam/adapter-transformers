@@ -365,9 +365,11 @@ class HubertFeatureExtractor(HubertFeatureEncoder):
     def __init__(self, config):
         super().__init__(config)
         warnings.warn(
-            f"The class `{self.__class__.__name__}` has been depreciated "
-            "and will be removed in Transformers v5. "
-            f"Use `{self.__class__.__bases__[0].__name__}` instead.",
+            (
+                f"The class `{self.__class__.__name__}` has been depreciated "
+                "and will be removed in Transformers v5. "
+                f"Use `{self.__class__.__bases__[0].__name__}` instead."
+            ),
             FutureWarning,
         )
 
@@ -1125,8 +1127,10 @@ class HubertForCTC(HubertPreTrainedModel):
         not be updated during training.
         """
         warnings.warn(
-            "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
-            "Please use the equivalent `freeze_feature_encoder` method instead.",
+            (
+                "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
+                "Please use the equivalent `freeze_feature_encoder` method instead."
+            ),
             FutureWarning,
         )
         self.freeze_feature_encoder()
@@ -1180,7 +1184,6 @@ class HubertForCTC(HubertPreTrainedModel):
 
         loss = None
         if labels is not None:
-
             if labels.max() >= self.config.vocab_size:
                 raise ValueError(f"Label values must be <= vocab_size: {self.config.vocab_size}")
 
@@ -1251,8 +1254,10 @@ class HubertForSequenceClassification(HubertPreTrainedModel):
         not be updated during training.
         """
         warnings.warn(
-            "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
-            "Please use the equivalent `freeze_feature_encoder` method instead.",
+            (
+                "The method `freeze_feature_extractor` is deprecated and will be removed in Transformers v5."
+                "Please use the equivalent `freeze_feature_encoder` method instead."
+            ),
             FutureWarning,
         )
         self.freeze_feature_encoder()

@@ -43,8 +43,10 @@ class FlavaProcessor(ProcessorMixin):
     def __init__(self, image_processor=None, tokenizer=None, **kwargs):
         if "feature_extractor" in kwargs:
             warnings.warn(
-                "The `feature_extractor` argument is deprecated and will be removed in v5, use `image_processor`"
-                " instead.",
+                (
+                    "The `feature_extractor` argument is deprecated and will be removed in v5, use `image_processor`"
+                    " instead."
+                ),
                 FutureWarning,
             )
             feature_extractor = kwargs.pop("feature_extractor")

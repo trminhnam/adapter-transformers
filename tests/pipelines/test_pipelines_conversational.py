@@ -41,16 +41,12 @@ class ConversationalPipelineTests(unittest.TestCase, metaclass=PipelineTestCaseM
     model_mapping = dict(
         list(MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING.items())
         if MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING
-        else [] + list(MODEL_FOR_CAUSAL_LM_MAPPING.items())
-        if MODEL_FOR_CAUSAL_LM_MAPPING
-        else []
+        else [] + list(MODEL_FOR_CAUSAL_LM_MAPPING.items()) if MODEL_FOR_CAUSAL_LM_MAPPING else []
     )
     tf_model_mapping = dict(
         list(TF_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING.items())
         if TF_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING
-        else [] + list(TF_MODEL_FOR_CAUSAL_LM_MAPPING.items())
-        if TF_MODEL_FOR_CAUSAL_LM_MAPPING
-        else []
+        else [] + list(TF_MODEL_FOR_CAUSAL_LM_MAPPING.items()) if TF_MODEL_FOR_CAUSAL_LM_MAPPING else []
     )
 
     def get_test_pipeline(self, model, tokenizer, feature_extractor):

@@ -1625,7 +1625,6 @@ class JukeboxMusicTokenConditioner(nn.Module):
     """
 
     def __init__(self, config, level):
-
         super().__init__()
         self.embed_tokens = nn.Embedding(config.music_vocab_size, config.hidden_size)
         config.embed_dim = config.music_vocab_size  # setting correct argument for the `JukeboxDecoder`
@@ -2399,8 +2398,10 @@ class JukeboxModel(JukeboxPreTrainedModel):
         for music_tokens_i, music_tokens_conds_i, metadata_i in iterator:
             name = ["Ancestral", "Primed"][music_tokens_i.shape[1] == 0]
             iterator.set_description(
-                f"[prior level {level}] {name} Sampling {sample_tokens} tokens out of"
-                f" {self.total_length//prior.raw_to_tokens}",
+                (
+                    f"[prior level {level}] {name} Sampling {sample_tokens} tokens out of"
+                    f" {self.total_length//prior.raw_to_tokens}"
+                ),
                 refresh=True,
             )
             tokens_i = prior.sample(

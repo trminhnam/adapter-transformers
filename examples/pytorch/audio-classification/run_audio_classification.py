@@ -172,9 +172,11 @@ class ModelArguments:
     def __post_init__(self):
         if not self.freeze_feature_extractor and self.freeze_feature_encoder:
             warnings.warn(
-                "The argument `--freeze_feature_extractor` is deprecated and "
-                "will be removed in a future version. Use `--freeze_feature_encoder`"
-                "instead. Setting `freeze_feature_encoder==True`.",
+                (
+                    "The argument `--freeze_feature_extractor` is deprecated and "
+                    "will be removed in a future version. Use `--freeze_feature_encoder`"
+                    "instead. Setting `freeze_feature_encoder==True`."
+                ),
                 FutureWarning,
             )
         if self.freeze_feature_extractor and not self.freeze_feature_encoder:

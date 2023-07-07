@@ -497,7 +497,6 @@ class ErnieEncoder(nn.Module):
             past_key_value = past_key_values[i] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
@@ -1415,8 +1414,10 @@ class ErnieForNextSentencePrediction(ErniePreTrainedModel):
 
         if "next_sentence_label" in kwargs:
             warnings.warn(
-                "The `next_sentence_label` argument is deprecated and will be removed in a future version, use"
-                " `labels` instead.",
+                (
+                    "The `next_sentence_label` argument is deprecated and will be removed in a future version, use"
+                    " `labels` instead."
+                ),
                 FutureWarning,
             )
             labels = kwargs.pop("next_sentence_label")

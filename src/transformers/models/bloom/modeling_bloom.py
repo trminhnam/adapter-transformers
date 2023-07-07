@@ -723,8 +723,10 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
         if deprecated_arguments.pop("position_ids", False) is not False:
             # `position_ids` could have been `torch.Tensor` or `None` so defaulting pop to `False` allows to detect if users were passing explicitly `None`
             warnings.warn(
-                "`position_ids` have no functionality in BLOOM and will be removed in v5.0.0. You can safely ignore"
-                " passing `position_ids`.",
+                (
+                    "`position_ids` have no functionality in BLOOM and will be removed in v5.0.0. You can safely"
+                    " ignore passing `position_ids`."
+                ),
                 FutureWarning,
             )
         if len(deprecated_arguments) > 0:
@@ -930,8 +932,10 @@ class BloomForCausalLM(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
         if deprecated_arguments.pop("position_ids", False) is not False:
             # `position_ids` could have been `torch.Tensor` or `None` so defaulting pop to `False` allows to detect if users were passing explicitly `None`
             warnings.warn(
-                "`position_ids` have no functionality in BLOOM and will be removed in v5.0.0. You can safely ignore"
-                " passing `position_ids`.",
+                (
+                    "`position_ids` have no functionality in BLOOM and will be removed in v5.0.0. You can safely"
+                    " ignore passing `position_ids`."
+                ),
                 FutureWarning,
             )
         if len(deprecated_arguments) > 0:
@@ -1061,8 +1065,10 @@ class BloomForSequenceClassification(ModelWithHeadsAdaptersMixin, BloomPreTraine
         if deprecated_arguments.pop("position_ids", False) is not False:
             # `position_ids` could have been `torch.Tensor` or `None` so defaulting pop to `False` allows to detect if users were passing explicitly `None`
             warnings.warn(
-                "`position_ids` have no functionality in BLOOM and will be removed in v5.0.0. You can safely ignore"
-                " passing `position_ids`.",
+                (
+                    "`position_ids` have no functionality in BLOOM and will be removed in v5.0.0. You can safely"
+                    " ignore passing `position_ids`."
+                ),
                 FutureWarning,
             )
         if len(deprecated_arguments) > 0:
@@ -1198,8 +1204,10 @@ class BloomForTokenClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedMo
         if deprecated_arguments.pop("position_ids", False) is not False:
             # `position_ids` could have been `torch.Tensor` or `None` so defaulting pop to `False` allows to detect if users were passing explicitly `None`
             warnings.warn(
-                "`position_ids` have no functionality in BLOOM and will be removed in v5.0.0. You can safely ignore"
-                " passing `position_ids`.",
+                (
+                    "`position_ids` have no functionality in BLOOM and will be removed in v5.0.0. You can safely"
+                    " ignore passing `position_ids`."
+                ),
                 FutureWarning,
             )
         if len(deprecated_arguments) > 0:

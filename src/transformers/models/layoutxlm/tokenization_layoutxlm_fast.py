@@ -306,6 +306,7 @@ class LayoutXLMTokenizerFast(PreTrainedTokenizerFast):
             word_labels (`List[int]`, `List[List[int]]`, *optional*):
                 Word-level integer labels (for token classification tasks such as FUNSD, CORD).
         """
+
         # Input type checking for clearer error
         def _is_valid_text_input(t):
             if isinstance(t, str):
@@ -448,7 +449,6 @@ class LayoutXLMTokenizerFast(PreTrainedTokenizerFast):
         verbose: bool = True,
         **kwargs,
     ) -> BatchEncoding:
-
         if not isinstance(batch_text_or_text_pairs, list):
             raise TypeError(f"batch_text_or_text_pairs has to be a list (got {type(batch_text_or_text_pairs)})")
 
@@ -483,9 +483,9 @@ class LayoutXLMTokenizerFast(PreTrainedTokenizerFast):
                 return_attention_mask=return_attention_mask,
                 return_overflowing_tokens=return_overflowing_tokens,
                 return_special_tokens_mask=return_special_tokens_mask,
-                return_offsets_mapping=True
-                if word_labels is not None
-                else return_offsets_mapping,  # we use offsets to create the labels
+                return_offsets_mapping=(
+                    True if word_labels is not None else return_offsets_mapping
+                ),  # we use offsets to create the labels
                 return_length=return_length,
                 verbose=verbose,
             )
@@ -602,7 +602,6 @@ class LayoutXLMTokenizerFast(PreTrainedTokenizerFast):
         verbose: bool = True,
         **kwargs
     ) -> BatchEncoding:
-
         # make it a batched input
         # 2 options:
         # 1) only text, in case text must be a list of str

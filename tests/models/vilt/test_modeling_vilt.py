@@ -317,24 +317,18 @@ class ViltModelTest(ModelTesterMixin, unittest.TestCase):
             loss = model(**inputs).loss
             loss.backward()
 
-    @unittest.skip(
-        reason="""VilT samples image tokens from a multinomial distribution, resulting in not deterministic
-                            hidden states"""
-    )
+    @unittest.skip(reason="""VilT samples image tokens from a multinomial distribution, resulting in not deterministic
+                            hidden states""")
     def test_save_load(self):
         pass
 
-    @unittest.skip(
-        reason="""VilT samples image tokens from a multinomial distribution, resulting in not deterministic
-                            hidden states"""
-    )
+    @unittest.skip(reason="""VilT samples image tokens from a multinomial distribution, resulting in not deterministic
+                            hidden states""")
     def test_determinism(self):
         pass
 
-    @unittest.skip(
-        reason="""VilT samples image tokens from a multinomial distribution, resulting in not deterministic
-                            hidden states"""
-    )
+    @unittest.skip(reason="""VilT samples image tokens from a multinomial distribution, resulting in not deterministic
+                            hidden states""")
     def test_model_outputs_equivalence(self):
         pass
 

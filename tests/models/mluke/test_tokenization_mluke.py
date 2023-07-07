@@ -231,7 +231,10 @@ class MLukeTokenizerIntegrationTests(unittest.TestCase):
 
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"], spaces_between_special_tokens=False),
-            "<s> ISO 639-3 uses the code fas for the dialects spoken across Iran and アフガニスタン ( Afghanistan ).</s>",
+            (
+                "<s> ISO 639-3 uses the code fas for the dialects spoken across Iran and アフガニスタン ( Afghanistan"
+                " ).</s>"
+            ),
         )
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"][1:5], spaces_between_special_tokens=False), "ISO 639-3"
@@ -278,7 +281,10 @@ class MLukeTokenizerIntegrationTests(unittest.TestCase):
 
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"], spaces_between_special_tokens=False),
-            "<s> ISO 639-3 uses the code fas for the dialects spoken across Iran and アフガニスタン ( Afghanistan ).</s>",
+            (
+                "<s> ISO 639-3 uses the code fas for the dialects spoken across Iran and アフガニスタン ( Afghanistan"
+                " ).</s>"
+            ),
         )
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"][1:5], spaces_between_special_tokens=False), "ISO 639-3"
@@ -365,8 +371,11 @@ class MLukeTokenizerIntegrationTests(unittest.TestCase):
 
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"], spaces_between_special_tokens=False),
-            "<s> ISO 639-3 uses the code fas</s></s> for the dialects spoken across Iran and アフガニスタン ( Afghanistan"
-            " ).</s>",
+            (
+                "<s> ISO 639-3 uses the code fas</s></s> for the dialects spoken across Iran and アフガニスタン ("
+                " Afghanistan"
+                " ).</s>"
+            ),
         )
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"][1:5], spaces_between_special_tokens=False), "ISO 639-3"
@@ -424,8 +433,11 @@ class MLukeTokenizerIntegrationTests(unittest.TestCase):
 
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"], spaces_between_special_tokens=False),
-            "<s> ISO 639-3 uses the code fas</s></s> for the dialects spoken across Iran and アフガニスタン ( Afghanistan"
-            " ).</s>",
+            (
+                "<s> ISO 639-3 uses the code fas</s></s> for the dialects spoken across Iran and アフガニスタン ("
+                " Afghanistan"
+                " ).</s>"
+            ),
         )
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"][1:5], spaces_between_special_tokens=False), "ISO 639-3"
@@ -508,8 +520,10 @@ class MLukeTokenizerIntegrationTests(unittest.TestCase):
         self.assertEqual(len(encoding["token_type_ids"]), 23)
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"], spaces_between_special_tokens=False),
-            "<s> Japanese is an<ent>East Asian language<ent>spoken by about 128 million people, primarily in"
-            " Japan.</s>",
+            (
+                "<s> Japanese is an<ent>East Asian language<ent>spoken by about 128 million people, primarily in"
+                " Japan.</s>"
+            ),
         )
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"][4:9], spaces_between_special_tokens=False),
@@ -562,8 +576,10 @@ class MLukeTokenizerIntegrationTests(unittest.TestCase):
 
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"], spaces_between_special_tokens=False),
-            "<s><ent>Japanese<ent>is an East Asian language spoken by about 128 million people, primarily"
-            " in<ent2>Japan<ent2>.</s>",
+            (
+                "<s><ent>Japanese<ent>is an East Asian language spoken by about 128 million people, primarily"
+                " in<ent2>Japan<ent2>.</s>"
+            ),
         )
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"][1:4], spaces_between_special_tokens=False),

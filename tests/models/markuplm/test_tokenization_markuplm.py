@@ -103,7 +103,7 @@ class MarkupLMTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
         return questions, nodes, xpaths
 
     def get_input_output_texts(self, tokenizer):
-        input_text = "UNwant\u00E9d,running"
+        input_text = "UNwant\u00e9d,running"
         output_text = "unwanted, running"
         return input_text, output_text
 
@@ -1455,9 +1455,11 @@ class MarkupLMTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
                         break
                 self.assertTrue(
                     find,
-                    f"'{new_special_token_str}' doesn't appear in the list "
-                    f"'{new_tokenizer.all_special_tokens_extended}' as an AddedToken with the same parameters as "
-                    f"'{special_token}' in the list {tokenizer.all_special_tokens_extended}",
+                    (
+                        f"'{new_special_token_str}' doesn't appear in the list "
+                        f"'{new_tokenizer.all_special_tokens_extended}' as an AddedToken with the same parameters as "
+                        f"'{special_token}' in the list {tokenizer.all_special_tokens_extended}"
+                    ),
                 )
             elif special_token not in special_tokens_map:
                 # The special token must appear identically in the list of the new tokenizer.
@@ -2280,8 +2282,10 @@ class MarkupLMTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
             tokenizer_fast.pad(encoding_fast)
         self.assertEqual(len(cm.records), 1)
         self.assertIn(
-            "Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to"
-            " encode the text followed by a call to the `pad` method to get a padded encoding.",
+            (
+                "Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to"
+                " encode the text followed by a call to the `pad` method to get a padded encoding."
+            ),
             cm.records[0].message,
         )
 

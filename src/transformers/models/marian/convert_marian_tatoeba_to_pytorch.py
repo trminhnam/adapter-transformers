@@ -236,24 +236,14 @@ class TatoebaConverter:
 * OPUS readme: [README.md]({readme_url})
 """
 
-        content = (
-            f"""
+        content = f"""
 * model: {model_dict['modeltype']}
 * source language code{src_multilingual*'s'}: {', '.join(a2_src_tags)}
 * target language code{tgt_multilingual*'s'}: {', '.join(a2_tgt_tags)}
 * dataset: opus {backtranslated_data}
 * release date: {model_dict['release-date']}
 * pre-processing: {model_dict['pre-processing']}
-"""
-            + multilingual_data
-            + tuned
-            + download
-            + langtoken
-            + datainfo
-            + testset
-            + testscores
-            + scorestable
-        )
+""" + multilingual_data + tuned + download + langtoken + datainfo + testset + testscores + scorestable
 
         content = FRONT_MATTER_TEMPLATE.format(lang_tags) + extra_markdown + content
 

@@ -657,7 +657,6 @@ class Speech2Text2Decoder(Speech2Text2PreTrainedModel):
             past_key_value = past_key_values[idx] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache = True` is incompatible with gradient checkpointing. Setting `use_cache ="
@@ -683,7 +682,6 @@ class Speech2Text2Decoder(Speech2Text2PreTrainedModel):
                     None,
                 )
             else:
-
                 layer_outputs = decoder_layer(
                     hidden_states,
                     attention_mask=attention_mask,
@@ -747,8 +745,10 @@ class Speech2Text2DecoderWrapper(Speech2Text2PreTrainedModel):
 
 
 @add_start_docstrings(
-    "The Speech2Text2 Decoder with a language modeling head. Can be used as the decoder part of"
-    " [`EncoderDecoderModel`] and [`SpeechEncoderDecoder`].",
+    (
+        "The Speech2Text2 Decoder with a language modeling head. Can be used as the decoder part of"
+        " [`EncoderDecoderModel`] and [`SpeechEncoderDecoder`]."
+    ),
     SPEECH_TO_TEXT_2_START_DOCSTRING,
 )
 class Speech2Text2ForCausalLM(Speech2Text2PreTrainedModel):

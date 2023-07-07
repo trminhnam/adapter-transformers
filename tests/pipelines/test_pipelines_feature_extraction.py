@@ -187,13 +187,11 @@ class FeatureExtractionPipelineTests(unittest.TestCase, metaclass=PipelineTestCa
             self.skipTest("This is a bimodal model, we need to find a more consistent way to switch on those models.")
             return
         elif model.config.is_encoder_decoder:
-            self.skipTest(
-                """encoder_decoder models are trickier for this pipeline.
+            self.skipTest("""encoder_decoder models are trickier for this pipeline.
                 Do we want encoder + decoder inputs to get some featues?
                 Do we want encoder only features ?
                 For now ignore those.
-                """
-            )
+                """)
 
             return
         feature_extractor = FeatureExtractionPipeline(

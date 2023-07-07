@@ -700,10 +700,12 @@ class TFGenerationMixin:
         has_default_max_length = kwargs.get("max_length") is None and generation_config.max_length is not None
         if has_default_max_length and generation_config.max_new_tokens is None:
             warnings.warn(
-                "Neither `max_length` nor `max_new_tokens` have been set, `max_length` will default to"
-                f" {generation_config.max_length} (`generation_config.max_length`). Controlling `max_length` via the"
-                " config is deprecated and `max_length` will be removed from the config in v5 of Transformers -- we"
-                " recommend using `max_new_tokens` to control the maximum length of the generation.",
+                (
+                    "Neither `max_length` nor `max_new_tokens` have been set, `max_length` will default to"
+                    f" {generation_config.max_length} (`generation_config.max_length`). Controlling `max_length` via"
+                    " the config is deprecated and `max_length` will be removed from the config in v5 of Transformers"
+                    " -- we recommend using `max_new_tokens` to control the maximum length of the generation."
+                ),
                 UserWarning,
             )
         elif has_default_max_length and generation_config.max_new_tokens is not None:
@@ -942,7 +944,6 @@ class TFGenerationMixin:
         bos_token_id: int = None,
         model_kwargs: Optional[Dict[str, tf.Tensor]] = None,
     ) -> tf.Tensor:
-
         # prepare `input_ids` for decoder if model is encoder-decoder
         if model_kwargs is not None and "decoder_input_ids" in model_kwargs:
             return model_kwargs.pop("decoder_input_ids")
@@ -2417,7 +2418,6 @@ class TFGenerationMixin:
             # if the first step in the loop, encode all the prefix and obtain: (1) past_key_values;
             # (2) last_hidden_states; (3) logit_for_next_step; (4) update model kwargs for the next step
             if model_kwargs.get("past_key_values") is None:
-
                 # prepare inputs
                 model_inputs = self.prepare_inputs_for_generation(
                     generated[:, :cur_len], use_cache=use_cache, **model_kwargs
@@ -2634,7 +2634,13 @@ class TFGenerationMixin:
             generated, finished_sequences, cur_len, model_kwargs, next_step_cached_variables
         ):
             maximum_iterations = max_length - cur_len
-            generated, _, cur_len, _, _, = tf.while_loop(
+            (
+                generated,
+                _,
+                cur_len,
+                _,
+                _,
+            ) = tf.while_loop(
                 contrastive_search_cond_fn,
                 contrastive_search_body_fn,
                 (generated, finished_sequences, cur_len, model_kwargs, next_step_cached_variables),

@@ -163,7 +163,8 @@ class CopyCheckTester(unittest.TestCase):
             " Multilingual BERT into"
             " [DistilmBERT](https://github.com/huggingface/transformers/tree/main/examples/distillation) and a German"
             " version of DistilBERT.\n1. **[ELECTRA](https://huggingface.co/transformers/model_doc/electra.html)** (来自"
-            " Google Research/Stanford University) 伴随论文 [ELECTRA: Pre-training text encoders as discriminators rather"
+            " Google Research/Stanford University) 伴随论文 [ELECTRA: Pre-training text encoders as discriminators"
+            " rather"
             " than generators](https://arxiv.org/abs/2003.10555) 由 Kevin Clark, Minh-Thang Luong, Quoc V. Le,"
             " Christopher D. Manning 发布。\n"
         )
@@ -190,7 +191,8 @@ class CopyCheckTester(unittest.TestCase):
         )
         link_unchanged_md_list = (
             "1. **[ALBERT](https://huggingface.co/transformers/main/model_doc/albert.html)** (来自 Google Research and"
-            " the Toyota Technological Institute at Chicago) 伴随论文 [ALBERT: A Lite BERT for Self-supervised Learning of"
+            " the Toyota Technological Institute at Chicago) 伴随论文 [ALBERT: A Lite BERT for Self-supervised"
+            " Learning of"
             " Language Representations](https://arxiv.org/abs/1909.11942), 由 Zhenzhong Lan, Mingda Chen, Sebastian"
             " Goodman, Kevin Gimpel, Piyush Sharma, Radu Soricut 发布。\n"
         )

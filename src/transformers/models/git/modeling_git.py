@@ -443,7 +443,6 @@ class GitEncoder(nn.Module):
             past_key_value = past_key_values[i] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
@@ -1056,8 +1055,10 @@ class GitProjection(nn.Module):
 
 
 @add_start_docstrings(
-    "The bare GIT Model transformer consisting of a CLIP image encoder and text decoder outputting raw hidden-states"
-    " without any specific head on top.",
+    (
+        "The bare GIT Model transformer consisting of a CLIP image encoder and text decoder outputting raw"
+        " hidden-states without any specific head on top."
+    ),
     GIT_START_DOCSTRING,
 )
 class GitModel(GitPreTrainedModel):

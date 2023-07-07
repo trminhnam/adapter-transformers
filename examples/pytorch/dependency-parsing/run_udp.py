@@ -156,9 +156,11 @@ def main():
         use_fast=model_args.use_fast,
         do_lower_case=model_args.do_lower_case,
         add_prefix_space=True,  # Used e.g. for RoBERTa
-        mecab_kwargs={"mecab_option": f"-r {model_args.mecab_dir} -d {model_args.mecab_dic_dir}"}
-        if model_args.is_japanese
-        else None,
+        mecab_kwargs=(
+            {"mecab_option": f"-r {model_args.mecab_dir} -d {model_args.mecab_dic_dir}"}
+            if model_args.is_japanese
+            else None
+        ),
     )
 
     # The task name (with prefix)
@@ -250,9 +252,11 @@ def main():
             if adapter_args.train_adapter:
                 adapter_config = AdapterConfigBase.load(adapter_args.adapter_config, **adapter_config_kwargs)
                 model.load_adapter(
-                    os.path.join(training_args.output_dir, "best_model", task_name)
-                    if training_args.do_train
-                    else adapter_args.load_adapter,
+                    (
+                        os.path.join(training_args.output_dir, "best_model", task_name)
+                        if training_args.do_train
+                        else adapter_args.load_adapter
+                    ),
                     config=adapter_config,
                     load_as=task_name,
                     **adapter_load_kwargs,
@@ -262,9 +266,11 @@ def main():
                         adapter_args.lang_adapter_config, **adapter_config_kwargs
                     )
                     lang_adapter_name = model.load_adapter(
-                        os.path.join(training_args.output_dir, "best_model", lang_adapter_name)
-                        if training_args.do_train
-                        else adapter_args.load_lang_adapter,
+                        (
+                            os.path.join(training_args.output_dir, "best_model", lang_adapter_name)
+                            if training_args.do_train
+                            else adapter_args.load_lang_adapter
+                        ),
                         config=lang_adapter_config,
                         load_as=lang_adapter_name,
                         **adapter_load_kwargs,

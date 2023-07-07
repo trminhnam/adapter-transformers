@@ -774,8 +774,10 @@ class DetrImageProcessor(BaseImageProcessor):
 
         if "max_size" in kwargs:
             warnings.warn(
-                "The `max_size` parameter is deprecated and will be removed in v4.26. "
-                "Please specify in `size['longest_edge'] instead`.",
+                (
+                    "The `max_size` parameter is deprecated and will be removed in v4.26. "
+                    "Please specify in `size['longest_edge'] instead`."
+                ),
                 FutureWarning,
             )
             max_size = kwargs.pop("max_size")
@@ -800,8 +802,10 @@ class DetrImageProcessor(BaseImageProcessor):
     @property
     def max_size(self):
         warnings.warn(
-            "The `max_size` parameter is deprecated and will be removed in v4.27. "
-            "Please specify in `size['longest_edge'] instead`.",
+            (
+                "The `max_size` parameter is deprecated and will be removed in v4.27. "
+                "Please specify in `size['longest_edge'] instead`."
+            ),
             FutureWarning,
         )
         return self.size["longest_edge"]
@@ -847,9 +851,11 @@ class DetrImageProcessor(BaseImageProcessor):
 
     def prepare(self, image, target, return_segmentation_masks=None, masks_path=None):
         warnings.warn(
-            "The `prepare` method is deprecated and will be removed in a future version. "
-            "Please use `prepare_annotation` instead. Note: the `prepare_annotation` method "
-            "does not return the image anymore.",
+            (
+                "The `prepare` method is deprecated and will be removed in a future version. "
+                "Please use `prepare_annotation` instead. Note: the `prepare_annotation` method "
+                "does not return the image anymore."
+            ),
         )
         target = self.prepare_annotation(image, target, return_segmentation_masks, masks_path, self.format)
         return image, target
@@ -880,8 +886,10 @@ class DetrImageProcessor(BaseImageProcessor):
         """
         if "max_size" in kwargs:
             warnings.warn(
-                "The `max_size` parameter is deprecated and will be removed in v4.26. "
-                "Please specify in `size['longest_edge'] instead`.",
+                (
+                    "The `max_size` parameter is deprecated and will be removed in v4.26. "
+                    "Please specify in `size['longest_edge'] instead`."
+                ),
                 FutureWarning,
             )
             max_size = kwargs.pop("max_size")
@@ -1102,8 +1110,10 @@ class DetrImageProcessor(BaseImageProcessor):
         """
         if "pad_and_return_pixel_mask" in kwargs:
             warnings.warn(
-                "The `pad_and_return_pixel_mask` argument is deprecated and will be removed in a future version, "
-                "use `do_pad` instead.",
+                (
+                    "The `pad_and_return_pixel_mask` argument is deprecated and will be removed in a future version, "
+                    "use `do_pad` instead."
+                ),
                 FutureWarning,
             )
             do_pad = kwargs.pop("pad_and_return_pixel_mask")
@@ -1111,8 +1121,10 @@ class DetrImageProcessor(BaseImageProcessor):
         max_size = None
         if "max_size" in kwargs:
             warnings.warn(
-                "The `max_size` argument is deprecated and will be removed in a future version, use"
-                " `size['longest_edge']` instead.",
+                (
+                    "The `max_size` argument is deprecated and will be removed in a future version, use"
+                    " `size['longest_edge']` instead."
+                ),
                 FutureWarning,
             )
             size = kwargs.pop("max_size")
@@ -1260,8 +1272,10 @@ class DetrImageProcessor(BaseImageProcessor):
             in the batch as predicted by the model.
         """
         warnings.warn(
-            "`post_process` is deprecated and will be removed in v5 of Transformers, please use"
-            " `post_process_object_detection`",
+            (
+                "`post_process` is deprecated and will be removed in v5 of Transformers, please use"
+                " `post_process_object_detection`"
+            ),
             FutureWarning,
         )
 
@@ -1303,8 +1317,10 @@ class DetrImageProcessor(BaseImageProcessor):
             in the batch as predicted by the model.
         """
         warnings.warn(
-            "`post_process_segmentation` is deprecated and will be removed in v5 of Transformers, please use"
-            " `post_process_semantic_segmentation`.",
+            (
+                "`post_process_segmentation` is deprecated and will be removed in v5 of Transformers, please use"
+                " `post_process_semantic_segmentation`."
+            ),
             FutureWarning,
         )
         out_logits, raw_masks = outputs.logits, outputs.pred_masks
@@ -1355,8 +1371,10 @@ class DetrImageProcessor(BaseImageProcessor):
             image in the batch as predicted by the model.
         """
         warnings.warn(
-            "`post_process_instance` is deprecated and will be removed in v5 of Transformers, please use"
-            " `post_process_instance_segmentation`.",
+            (
+                "`post_process_instance` is deprecated and will be removed in v5 of Transformers, please use"
+                " `post_process_instance_segmentation`."
+            ),
             FutureWarning,
         )
 
@@ -1402,8 +1420,10 @@ class DetrImageProcessor(BaseImageProcessor):
             an image in the batch as predicted by the model.
         """
         warnings.warn(
-            "`post_process_panoptic is deprecated and will be removed in v5 of Transformers, please use"
-            " `post_process_panoptic_segmentation`.",
+            (
+                "`post_process_panoptic is deprecated and will be removed in v5 of Transformers, please use"
+                " `post_process_panoptic_segmentation`."
+            ),
             FutureWarning,
         )
         if target_sizes is None:

@@ -488,7 +488,6 @@ class AdapterLayer(AdapterLayerBase, nn.Module):
                 children_hidden.append(child)
             # Case 4: We have a single adapter which is part of this module -> forward pass
             elif adapter_block in self.adapters:
-
                 adapter_layer = self.adapters[adapter_block]
                 context = ForwardContext.get_context()
                 layer_output = adapter_layer(

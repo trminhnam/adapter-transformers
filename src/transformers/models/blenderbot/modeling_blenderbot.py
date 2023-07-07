@@ -1015,7 +1015,6 @@ class BlenderbotDecoder(BlenderbotPreTrainedModel):
             past_key_value = past_key_values[idx] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
@@ -1040,7 +1039,6 @@ class BlenderbotDecoder(BlenderbotPreTrainedModel):
                     None,
                 )
             else:
-
                 layer_outputs = decoder_layer(
                     hidden_states,
                     attention_mask=attention_mask,
@@ -1111,9 +1109,11 @@ class BlenderbotModel(BlenderbotPreTrainedModel):
     def from_pretrained(cls, pretrained_model_name_or_path: Optional[Union[str, os.PathLike]], *model_args, **kwargs):
         if pretrained_model_name_or_path == "facebook/blenderbot-90M":
             warnings.warn(
-                "The checkpoint `facebook/blenderbot-90M` is deprecated. In the future, please use the identical"
-                " checkpoint `facebook/small_blenderbot-90M` with"
-                " `BlenderbotSmallModel.from_pretrained('facebook/small_blenderbot-90M')` instead.",
+                (
+                    "The checkpoint `facebook/blenderbot-90M` is deprecated. In the future, please use the identical"
+                    " checkpoint `facebook/small_blenderbot-90M` with"
+                    " `BlenderbotSmallModel.from_pretrained('facebook/small_blenderbot-90M')` instead."
+                ),
                 FutureWarning,
             )
             return BlenderbotSmallModel.from_pretrained(pretrained_model_name_or_path)
@@ -1256,9 +1256,12 @@ class BlenderbotForConditionalGeneration(BlenderbotPreTrainedModel):
     def from_pretrained(cls, pretrained_model_name_or_path: Optional[Union[str, os.PathLike]], *model_args, **kwargs):
         if pretrained_model_name_or_path == "facebook/blenderbot-90M":
             warnings.warn(
-                "The checkpoint `facebook/blenderbot-90M` is deprecated. In the future, please use the identical"
-                " checkpoint `facebook/small_blenderbot-90M` with"
-                " `BlenderbotSmallForConditionalGeneration.from_pretrained('facebook/small_blenderbot-90M')` instead.",
+                (
+                    "The checkpoint `facebook/blenderbot-90M` is deprecated. In the future, please use the identical"
+                    " checkpoint `facebook/small_blenderbot-90M` with"
+                    " `BlenderbotSmallForConditionalGeneration.from_pretrained('facebook/small_blenderbot-90M')`"
+                    " instead."
+                ),
                 FutureWarning,
             )
             return BlenderbotSmallForConditionalGeneration.from_pretrained(pretrained_model_name_or_path)

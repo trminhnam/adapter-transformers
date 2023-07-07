@@ -1072,8 +1072,10 @@ class TrainingArguments:
 
         if isinstance(self.evaluation_strategy, EvaluationStrategy):
             warnings.warn(
-                "using `EvaluationStrategy` for `evaluation_strategy` is deprecated and will be removed in version 5"
-                " of 🤗 Transformers. Use `IntervalStrategy` instead",
+                (
+                    "using `EvaluationStrategy` for `evaluation_strategy` is deprecated and will be removed in version"
+                    " 5 of 🤗 Transformers. Use `IntervalStrategy` instead"
+                ),
                 FutureWarning,
             )
             # Go back to the underlying string or we won't be able to instantiate `IntervalStrategy` on it.
@@ -1125,14 +1127,15 @@ class TrainingArguments:
         if self.framework == "pt" and is_torch_available():
             if self.fp16_backend and self.fp16_backend != "auto":
                 warnings.warn(
-                    "`fp16_backend` is deprecated and will be removed in version 5 of 🤗 Transformers. Use"
-                    " `half_precision_backend` instead",
+                    (
+                        "`fp16_backend` is deprecated and will be removed in version 5 of 🤗 Transformers. Use"
+                        " `half_precision_backend` instead"
+                    ),
                     FutureWarning,
                 )
                 self.half_precision_backend = self.fp16_backend
 
             if self.bf16 or self.bf16_full_eval:
-
                 if self.no_cuda and not is_torch_bf16_cpu_available() and not is_torch_tpu_available():
                     # cpu
                     raise ValueError("Your setup doesn't support bf16/(cpu, tpu, neuroncore). You need torch>=1.10")
@@ -1160,8 +1163,10 @@ class TrainingArguments:
         self.optim = OptimizerNames(self.optim)
         if self.adafactor:
             warnings.warn(
-                "`--adafactor` is deprecated and will be removed in version 5 of 🤗 Transformers. Use `--optim"
-                " adafactor` instead",
+                (
+                    "`--adafactor` is deprecated and will be removed in version 5 of 🤗 Transformers. Use `--optim"
+                    " adafactor` instead"
+                ),
                 FutureWarning,
             )
             self.optim = OptimizerNames.ADAFACTOR
@@ -1194,8 +1199,10 @@ class TrainingArguments:
 
         if self.torchdynamo is not None:
             warnings.warn(
-                "`torchdynamo` is deprecated and will be removed in version 5 of 🤗 Transformers. Use"
-                " `torch_compile_backend` instead",
+                (
+                    "`torchdynamo` is deprecated and will be removed in version 5 of 🤗 Transformers. Use"
+                    " `torch_compile_backend` instead"
+                ),
                 FutureWarning,
             )
             self.torch_compile_backend = self.torchdynamo
@@ -1290,8 +1297,10 @@ class TrainingArguments:
 
         if self.tpu_metrics_debug:
             warnings.warn(
-                "using `--tpu_metrics_debug` is deprecated and will be removed in version 5 of 🤗 Transformers. Use"
-                " `--debug tpu_metrics_debug` instead",
+                (
+                    "using `--tpu_metrics_debug` is deprecated and will be removed in version 5 of 🤗 Transformers. Use"
+                    " `--debug tpu_metrics_debug` instead"
+                ),
                 FutureWarning,
             )
             self.debug += " tpu_metrics_debug"
@@ -1313,8 +1322,10 @@ class TrainingArguments:
 
         if self.push_to_hub_token is not None:
             warnings.warn(
-                "`--push_to_hub_token` is deprecated and will be removed in version 5 of 🤗 Transformers. Use "
-                "`--hub_token` instead.",
+                (
+                    "`--push_to_hub_token` is deprecated and will be removed in version 5 of 🤗 Transformers. Use "
+                    "`--hub_token` instead."
+                ),
                 FutureWarning,
             )
             self.hub_token = self.push_to_hub_token
@@ -1325,24 +1336,30 @@ class TrainingArguments:
             )
             if self.push_to_hub_organization is not None:
                 warnings.warn(
-                    "`--push_to_hub_model_id` and `--push_to_hub_organization` are deprecated and will be removed in "
-                    "version 5 of 🤗 Transformers. Use `--hub_model_id` instead and pass the full repo name to this "
-                    f"argument (in this case {self.hub_model_id}).",
+                    (
+                        "`--push_to_hub_model_id` and `--push_to_hub_organization` are deprecated and will be removed"
+                        " in version 5 of 🤗 Transformers. Use `--hub_model_id` instead and pass the full repo name"
+                        f" to this argument (in this case {self.hub_model_id})."
+                    ),
                     FutureWarning,
                 )
             else:
                 warnings.warn(
-                    "`--push_to_hub_model_id` is deprecated and will be removed in version 5 of 🤗 Transformers. Use "
-                    "`--hub_model_id` instead and pass the full repo name to this argument (in this case "
-                    f"{self.hub_model_id}).",
+                    (
+                        "`--push_to_hub_model_id` is deprecated and will be removed in version 5 of 🤗 Transformers."
+                        " Use `--hub_model_id` instead and pass the full repo name to this argument (in this case"
+                        f" {self.hub_model_id})."
+                    ),
                     FutureWarning,
                 )
         elif self.push_to_hub_organization is not None:
             self.hub_model_id = f"{self.push_to_hub_organization}/{Path(self.output_dir).name}"
             warnings.warn(
-                "`--push_to_hub_organization` is deprecated and will be removed in version 5 of 🤗 Transformers. Use "
-                "`--hub_model_id` instead and pass the full repo name to this argument (in this case "
-                f"{self.hub_model_id}).",
+                (
+                    "`--push_to_hub_organization` is deprecated and will be removed in version 5 of 🤗 Transformers."
+                    " Use `--hub_model_id` instead and pass the full repo name to this argument (in this case"
+                    f" {self.hub_model_id})."
+                ),
                 FutureWarning,
             )
 

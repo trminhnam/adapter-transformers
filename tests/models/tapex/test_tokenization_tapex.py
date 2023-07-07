@@ -84,7 +84,6 @@ class TapexTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
         add_special_tokens: bool = True,
         return_table_and_query: bool = False,
     ):
-
         toks = [tokenizer.decode([i], clean_up_tokenization_spaces=False) for i in range(len(tokenizer))]
 
         if empty_table:
@@ -347,7 +346,7 @@ class TapexTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
                 table = self.get_table(tokenizer, length=0)
                 tmpdirname = tempfile.mkdtemp()
 
-                sample_text = " He is very happy, UNwant\u00E9d,running"
+                sample_text = " He is very happy, UNwant\u00e9d,running"
                 before_tokens = tokenizer.encode(table, sample_text, add_special_tokens=False)
                 before_vocab = tokenizer.get_vocab()
                 tokenizer.save_pretrained(tmpdirname)
@@ -364,7 +363,6 @@ class TapexTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
         tokenizers = self.get_tokenizers(do_lower_case=False)
         for tokenizer in tokenizers:
             with self.subTest(f"{tokenizer.__class__.__name__}"):
-
                 table, query = self.get_table_and_query(tokenizer)
 
                 sequences = tokenizer.encode(table, query, add_special_tokens=False)

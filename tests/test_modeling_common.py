@@ -202,9 +202,11 @@ class ModelTesterMixin:
         inputs_dict = copy.deepcopy(inputs_dict)
         if model_class in get_values(MODEL_FOR_MULTIPLE_CHOICE_MAPPING):
             inputs_dict = {
-                k: v.unsqueeze(1).expand(-1, self.model_tester.num_choices, -1).contiguous()
-                if isinstance(v, torch.Tensor) and v.ndim > 1
-                else v
+                k: (
+                    v.unsqueeze(1).expand(-1, self.model_tester.num_choices, -1).contiguous()
+                    if isinstance(v, torch.Tensor) and v.ndim > 1
+                    else v
+                )
                 for k, v in inputs_dict.items()
             }
         elif model_class in get_values(MODEL_FOR_AUDIO_XVECTOR_MAPPING):
@@ -2986,8 +2988,10 @@ class ModelUtilsTest(TestCasePlus):
         self.assertGreater(
             diff_percent,
             0.15,
-            "should use less CPU memory for low_cpu_mem_usage=True, "
-            f"but got max_rss_normal={max_rss_normal} and max_rss_low_mem={max_rss_low_mem}",
+            (
+                "should use less CPU memory for low_cpu_mem_usage=True, "
+                f"but got max_rss_normal={max_rss_normal} and max_rss_low_mem={max_rss_low_mem}"
+            ),
         )
 
         # if you want to compare things manually, let's first look at the size of the model in bytes

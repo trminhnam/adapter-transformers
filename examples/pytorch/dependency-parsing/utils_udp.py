@@ -287,7 +287,6 @@ class DependencyParsingTrainer(Trainer):
         return PredictionOutput(predictions=output.predictions, label_ids=output.label_ids, metrics=output.metrics)
 
     def store_best_model(self, output):
-
         if self.args.metric_score not in output.metrics:
             raise Exception(
                 "Metric %s not in output.\nThe following output was generated: %s",
@@ -340,7 +339,6 @@ class DependencyParsingTrainer(Trainer):
         metric = ParsingMetric()
 
         for inputs in tqdm(dataloader, desc=description):
-
             for k, v in inputs.items():
                 inputs[k] = v.to(self.args.device)
 

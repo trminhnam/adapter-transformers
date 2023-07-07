@@ -340,8 +340,10 @@ class BatchEncoding(UserDict):
                 " class)."
             )
         warnings.warn(
-            "`BatchEncoding.words()` property is deprecated and should be replaced with the identical, "
-            "but more self-explanatory `BatchEncoding.word_ids()` property.",
+            (
+                "`BatchEncoding.words()` property is deprecated and should be replaced with the identical, "
+                "but more self-explanatory `BatchEncoding.word_ids()` property."
+            ),
             FutureWarning,
         )
         return self.word_ids(batch_index)
@@ -1704,8 +1706,10 @@ class PreTrainedTokenizerBase(SpecialTokensMixin, PushToHubMixin):
                     "supported for this tokenizer. Use a model identifier or the path to a directory instead."
                 )
             warnings.warn(
-                f"Calling {cls.__name__}.from_pretrained() with the path to a single file or url is deprecated and "
-                "won't be possible anymore in v5. Use a model identifier or the path to a directory instead.",
+                (
+                    f"Calling {cls.__name__}.from_pretrained() with the path to a single file or url is deprecated and"
+                    " won't be possible anymore in v5. Use a model identifier or the path to a directory instead."
+                ),
                 FutureWarning,
             )
             file_id = list(cls.vocab_files_names.keys())[0]
@@ -1932,7 +1936,6 @@ class PreTrainedTokenizerBase(SpecialTokensMixin, PushToHubMixin):
 
             model_max_length = cls.max_model_input_sizes[pretrained_model_name_or_path]
             if model_max_length is not None and isinstance(model_max_length, (int, float)):
-
                 model_max_length = min(init_kwargs.get("model_max_length", int(1e30)), model_max_length)
                 # TODO(PVP) - uncomment following line in Transformers v5
                 # init_kwargs["model_max_length"] = model_max_length
@@ -2337,11 +2340,13 @@ class PreTrainedTokenizerBase(SpecialTokensMixin, PushToHubMixin):
         if padding is False and old_pad_to_max_length:
             if verbose:
                 warnings.warn(
-                    "The `pad_to_max_length` argument is deprecated and will be removed in a future version, "
-                    "use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or "
-                    "use `padding='max_length'` to pad to a max length. In this case, you can give a specific "
-                    "length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the "
-                    "maximal input size of the model (e.g. 512 for Bert).",
+                    (
+                        "The `pad_to_max_length` argument is deprecated and will be removed in a future version, "
+                        "use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or "
+                        "use `padding='max_length'` to pad to a max length. In this case, you can give a specific "
+                        "length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the "
+                        "maximal input size of the model (e.g. 512 for Bert)."
+                    ),
                     FutureWarning,
                 )
             if max_length is None:
@@ -2372,14 +2377,16 @@ class PreTrainedTokenizerBase(SpecialTokensMixin, PushToHubMixin):
         if truncation is None and old_truncation_strategy != "do_not_truncate":
             if verbose:
                 warnings.warn(
-                    "The `truncation_strategy` argument is deprecated and will be removed in a future version, use"
-                    " `truncation=True` to truncate examples to a max length. You can give a specific length with"
-                    " `max_length` (e.g. `max_length=45`) or leave max_length to None to truncate to the maximal input"
-                    " size of the model (e.g. 512 for Bert).  If you have pairs of inputs, you can give a specific"
-                    " truncation strategy selected among `truncation='only_first'` (will only truncate the first"
-                    " sentence in the pairs) `truncation='only_second'` (will only truncate the second sentence in the"
-                    " pairs) or `truncation='longest_first'` (will iteratively remove tokens from the longest sentence"
-                    " in the pairs).",
+                    (
+                        "The `truncation_strategy` argument is deprecated and will be removed in a future version, use"
+                        " `truncation=True` to truncate examples to a max length. You can give a specific length with"
+                        " `max_length` (e.g. `max_length=45`) or leave max_length to None to truncate to the maximal"
+                        " input size of the model (e.g. 512 for Bert).  If you have pairs of inputs, you can give a"
+                        " specific truncation strategy selected among `truncation='only_first'` (will only truncate"
+                        " the first sentence in the pairs) `truncation='only_second'` (will only truncate the second"
+                        " sentence in the pairs) or `truncation='longest_first'` (will iteratively remove tokens from"
+                        " the longest sentence in the pairs)."
+                    ),
                     FutureWarning,
                 )
             truncation_strategy = TruncationStrategy(old_truncation_strategy)
@@ -3369,7 +3376,6 @@ class PreTrainedTokenizerBase(SpecialTokensMixin, PushToHubMixin):
 
             if self.padding_side == "right":
                 if return_attention_mask:
-
                     encoded_inputs["attention_mask"] = encoded_inputs["attention_mask"] + [0] * difference
                 if "token_type_ids" in encoded_inputs:
                     encoded_inputs["token_type_ids"] = (

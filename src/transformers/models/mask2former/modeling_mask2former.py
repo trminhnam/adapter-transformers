@@ -1590,7 +1590,6 @@ class Mask2FormerMaskedAttentionDecoderLayer(nn.Module):
         encoder_attention_mask: Optional[torch.Tensor] = None,
         output_attentions: Optional[bool] = False,
     ):
-
         # Masked(Cross)-Attention Block
         cross_attn_weights = None
         self_attn_weights = None
@@ -1650,7 +1649,6 @@ class Mask2FormerMaskedAttentionDecoderLayer(nn.Module):
         encoder_attention_mask: Optional[torch.Tensor] = None,
         output_attentions: Optional[bool] = False,
     ):
-
         # Masked(Cross)-Attention Block
         cross_attn_weights = None
         self_attn_weights = None
@@ -2010,7 +2008,6 @@ class Mask2FormerMaskPredictor(nn.Module):
         self.mask_embedder = Mask2FormerMLPPredictionHead(self.hidden_size, self.hidden_size, mask_feature_size)
 
     def forward(self, outputs: torch.Tensor, pixel_embeddings: torch.Tensor, attention_mask_target_size: int = None):
-
         mask_embeddings = self.mask_embedder(outputs.transpose(0, 1))
 
         # Sum up over the channels
@@ -2057,7 +2054,6 @@ class Mask2FormerTransformerModule(nn.Module):
         output_hidden_states: bool = False,
         output_attentions: bool = False,
     ) -> Mask2FormerMaskedAttentionDecoderOutput:
-
         multi_stage_features = []
         multi_stage_positional_embeddings = []
         size_list = []

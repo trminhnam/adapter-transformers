@@ -409,7 +409,6 @@ class TapasModelTester:
 
 @require_torch
 class TapasModelTest(ModelTesterMixin, unittest.TestCase):
-
     all_model_classes = (
         (
             TapasModel,
@@ -428,9 +427,11 @@ class TapasModelTest(ModelTesterMixin, unittest.TestCase):
         inputs_dict = copy.deepcopy(inputs_dict)
         if model_class in get_values(MODEL_FOR_MULTIPLE_CHOICE_MAPPING):
             inputs_dict = {
-                k: v.unsqueeze(1).expand(-1, self.model_tester.num_choices, -1).contiguous()
-                if isinstance(v, torch.Tensor) and v.ndim > 1
-                else v
+                k: (
+                    v.unsqueeze(1).expand(-1, self.model_tester.num_choices, -1).contiguous()
+                    if isinstance(v, torch.Tensor) and v.ndim > 1
+                    else v
+                )
                 for k, v in inputs_dict.items()
             }
 

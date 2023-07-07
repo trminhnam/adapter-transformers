@@ -561,9 +561,11 @@ class Swinv2Attention(nn.Module):
             dim=dim,
             num_heads=num_heads,
             window_size=window_size,
-            pretrained_window_size=pretrained_window_size
-            if isinstance(pretrained_window_size, collections.abc.Iterable)
-            else (pretrained_window_size, pretrained_window_size),
+            pretrained_window_size=(
+                pretrained_window_size
+                if isinstance(pretrained_window_size, collections.abc.Iterable)
+                else (pretrained_window_size, pretrained_window_size)
+            ),
         )
         self.output = Swinv2SelfOutput(config, dim)
         self.pruned_heads = set()
@@ -641,9 +643,11 @@ class Swinv2Layer(nn.Module):
             dim=dim,
             num_heads=num_heads,
             window_size=self.window_size,
-            pretrained_window_size=pretrained_window_size
-            if isinstance(pretrained_window_size, collections.abc.Iterable)
-            else (pretrained_window_size, pretrained_window_size),
+            pretrained_window_size=(
+                pretrained_window_size
+                if isinstance(pretrained_window_size, collections.abc.Iterable)
+                else (pretrained_window_size, pretrained_window_size)
+            ),
         )
         self.layernorm_before = nn.LayerNorm(dim, eps=config.layer_norm_eps)
         self.drop_path = Swinv2DropPath(config.drop_path_rate) if config.drop_path_rate > 0.0 else nn.Identity()
@@ -815,7 +819,6 @@ class Swinv2Stage(nn.Module):
     ) -> Tuple[torch.Tensor]:
         height, width = input_dimensions
         for i, layer_module in enumerate(self.blocks):
-
             layer_head_mask = head_mask[i] if head_mask is not None else None
 
             layer_outputs = layer_module(

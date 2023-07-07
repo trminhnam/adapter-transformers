@@ -58,7 +58,7 @@ ROFORMER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "junnyu/roformer_chinese_char_small",
     "junnyu/roformer_chinese_char_base",
     "junnyu/roformer_small_discriminator",
-    "junnyu/roformer_small_generator"
+    "junnyu/roformer_small_generator",
     # See all RoFormer models at https://huggingface.co/models?filter=roformer
 ]
 
@@ -572,7 +572,6 @@ class RoFormerEncoder(nn.Module):
             past_key_value = past_key_values[i] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."

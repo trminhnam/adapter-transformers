@@ -87,9 +87,12 @@ class GlueDataset(Dataset):
         cache_dir: Optional[str] = None,
     ):
         warnings.warn(
-            "This dataset will be removed from the library soon, preprocessing should be handled with the 🤗 Datasets "
-            "library. You can have a look at this example script for pointers: "
-            "https://github.com/huggingface/transformers/blob/main/examples/pytorch/text-classification/run_glue.py",
+            (
+                "This dataset will be removed from the library soon, preprocessing should be handled with the 🤗"
+                " Datasets "
+                "library. You can have a look at this example script for pointers: "
+                "https://github.com/huggingface/transformers/blob/main/examples/pytorch/text-classification/run_glue.py"
+            ),
             FutureWarning,
         )
         self.args = args
@@ -121,7 +124,6 @@ class GlueDataset(Dataset):
         # and the others will use the cache.
         lock_path = cached_features_file + ".lock"
         with FileLock(lock_path):
-
             if os.path.exists(cached_features_file) and not args.overwrite_cache:
                 start = time.time()
                 self.features = torch.load(cached_features_file)

@@ -399,15 +399,19 @@ class MaskFormerImageProcessor(BaseImageProcessor):
     ):
         if "size_divisibility" in kwargs:
             warnings.warn(
-                "The `size_divisibility` argument is deprecated and will be removed in v4.27. Please use "
-                "`size_divisor` instead.",
+                (
+                    "The `size_divisibility` argument is deprecated and will be removed in v4.27. Please use "
+                    "`size_divisor` instead."
+                ),
                 FutureWarning,
             )
             size_divisor = kwargs.pop("size_divisibility")
         if "max_size" in kwargs:
             warnings.warn(
-                "The `max_size` argument is deprecated and will be removed in v4.27. Please use size['longest_edge']"
-                " instead.",
+                (
+                    "The `max_size` argument is deprecated and will be removed in v4.27. Please use"
+                    " size['longest_edge'] instead."
+                ),
                 FutureWarning,
             )
             # We make max_size a private attribute so we can pass it as a default value in the preprocess method whilst
@@ -417,8 +421,10 @@ class MaskFormerImageProcessor(BaseImageProcessor):
             self._max_size = 1333
         if "reduce_labels" in kwargs:
             warnings.warn(
-                "The `reduce_labels` argument is deprecated and will be removed in v4.27. Please use "
-                "`do_reduce_labels` instead.",
+                (
+                    "The `reduce_labels` argument is deprecated and will be removed in v4.27. Please use "
+                    "`do_reduce_labels` instead."
+                ),
                 FutureWarning,
             )
             do_reduce_labels = kwargs.pop("reduce_labels")
@@ -455,8 +461,10 @@ class MaskFormerImageProcessor(BaseImageProcessor):
     @property
     def size_divisibility(self):
         warnings.warn(
-            "The `size_divisibility` property is deprecated and will be removed in v4.27. Please use "
-            "`size_divisor` instead.",
+            (
+                "The `size_divisibility` property is deprecated and will be removed in v4.27. Please use "
+                "`size_divisor` instead."
+            ),
             FutureWarning,
         )
         return self.size_divisor
@@ -464,8 +472,10 @@ class MaskFormerImageProcessor(BaseImageProcessor):
     @property
     def max_size(self):
         warnings.warn(
-            "The `max_size` property is deprecated and will be removed in v4.27. Please use size['longest_edge']"
-            " instead.",
+            (
+                "The `max_size` property is deprecated and will be removed in v4.27. Please use size['longest_edge']"
+                " instead."
+            ),
             FutureWarning,
         )
         return self.size["longest_edge"]
@@ -473,8 +483,10 @@ class MaskFormerImageProcessor(BaseImageProcessor):
     @property
     def reduce_labels(self):
         warnings.warn(
-            "The `reduce_labels` property is deprecated and will be removed in v4.27. Please use "
-            "`do_reduce_labels` instead.",
+            (
+                "The `reduce_labels` property is deprecated and will be removed in v4.27. Please use "
+                "`do_reduce_labels` instead."
+            ),
             FutureWarning,
         )
         return self.do_reduce_labels
@@ -494,8 +506,10 @@ class MaskFormerImageProcessor(BaseImageProcessor):
         """
         if "max_size" in kwargs:
             warnings.warn(
-                "The `max_size` parameter is deprecated and will be removed in v4.27. "
-                "Please specify in `size['longest_edge'] instead`.",
+                (
+                    "The `max_size` parameter is deprecated and will be removed in v4.27. "
+                    "Please specify in `size['longest_edge'] instead`."
+                ),
                 FutureWarning,
             )
             max_size = kwargs.pop("max_size")
@@ -674,8 +688,10 @@ class MaskFormerImageProcessor(BaseImageProcessor):
             )
         if "reduce_labels" in kwargs:
             warnings.warn(
-                "The `reduce_labels` argument is deprecated and will be removed in v4.27. Please use"
-                " `do_reduce_labels` instead.",
+                (
+                    "The `reduce_labels` argument is deprecated and will be removed in v4.27. Please use"
+                    " `do_reduce_labels` instead."
+                ),
                 FutureWarning,
             )
             if do_reduce_labels is not None:
@@ -929,8 +945,10 @@ class MaskFormerImageProcessor(BaseImageProcessor):
                 A tensor of shape (`batch_size, num_class_labels, height, width`).
         """
         logger.warning(
-            "`post_process_segmentation` is deprecated and will be removed in v5 of Transformers, please use"
-            " `post_process_instance_segmentation`",
+            (
+                "`post_process_segmentation` is deprecated and will be removed in v5 of Transformers, please use"
+                " `post_process_instance_segmentation`"
+            ),
             FutureWarning,
         )
 

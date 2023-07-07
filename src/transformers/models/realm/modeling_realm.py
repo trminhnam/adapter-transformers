@@ -577,7 +577,6 @@ class RealmEncoder(nn.Module):
             past_key_value = past_key_values[i] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
@@ -1371,8 +1370,10 @@ class RealmScorer(RealmPreTrainedModel):
 
 
 @add_start_docstrings(
-    "The knowledge-augmented encoder of REALM outputting masked language model logits and marginal log-likelihood"
-    " loss.",
+    (
+        "The knowledge-augmented encoder of REALM outputting masked language model logits and marginal log-likelihood"
+        " loss."
+    ),
     REALM_START_DOCSTRING,
 )
 class RealmKnowledgeAugEncoder(RealmPreTrainedModel):
@@ -1526,7 +1527,6 @@ class RealmKnowledgeAugEncoder(RealmPreTrainedModel):
 
 @add_start_docstrings("The reader of REALM.", REALM_START_DOCSTRING)
 class RealmReader(RealmPreTrainedModel):
-
     _keys_to_ignore_on_load_unexpected = [r"pooler", "cls"]
 
     def __init__(self, config):

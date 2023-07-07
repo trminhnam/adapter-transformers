@@ -103,6 +103,10 @@ _import_structure = {
         "BertModelWithHeads",
     ],
     "models.bert_generation": ["BertGenerationAdapterModel"],
+    "models.bloom": [
+        "BloomAdapterModel",
+        "BloomModelWithHeads",
+    ],
     "models.deberta": ["DebertaAdapterModel"],
     "models.debertaV2": ["DebertaV2AdapterModel"],
     "models.distilbert": [
@@ -143,10 +147,6 @@ _import_structure = {
         "get_adapter_config_hash",
         "get_adapter_info",
         "list_adapters",
-    ],
-    "models.bloom": [
-        "BloomAdapterModel",
-        "BloomModelWithHeads",
     ],
 }
 

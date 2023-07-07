@@ -187,13 +187,17 @@ class PipelineTestCaseMeta(type):
         def gen_test(ModelClass, checkpoint, tiny_config, tokenizer_class, feature_extractor_class):
             @skipIf(
                 tiny_config is None,
-                "TinyConfig does not exist, make sure that you defined a `_CONFIG_FOR_DOC` variable in the modeling"
-                " file",
+                (
+                    "TinyConfig does not exist, make sure that you defined a `_CONFIG_FOR_DOC` variable in the"
+                    " modeling file"
+                ),
             )
             @skipIf(
                 checkpoint is None,
-                "checkpoint does not exist, make sure that you defined a `_CHECKPOINT_FOR_DOC` variable in the"
-                " modeling file",
+                (
+                    "checkpoint does not exist, make sure that you defined a `_CHECKPOINT_FOR_DOC` variable in the"
+                    " modeling file"
+                ),
             )
             def test(self):
                 if ModelClass.__name__.endswith("ForCausalLM"):

@@ -438,14 +438,9 @@ def duplicate_module(
         # Special cases
         if "PRETRAINED_CONFIG_ARCHIVE_MAP = {" in obj:
             # docstyle-ignore
-            obj = (
-                f"{new_model_patterns.model_upper_cased}_PRETRAINED_CONFIG_ARCHIVE_MAP = "
-                + "{"
-                + f"""
+            obj = f"{new_model_patterns.model_upper_cased}_PRETRAINED_CONFIG_ARCHIVE_MAP = " + "{" + f"""
     "{new_model_patterns.checkpoint}": "https://huggingface.co/{new_model_patterns.checkpoint}/resolve/main/config.json",
-"""
-                + "}\n"
-            )
+""" + "}\n"
             new_objects.append(obj)
             continue
         elif "PRETRAINED_MODEL_ARCHIVE_LIST = [" in obj:
@@ -1593,8 +1588,10 @@ def get_user_input():
     )
 
     all_frameworks = get_user_field(
-        "Should we add a version of your new model in all the frameworks implemented by"
-        f" {old_model_type} ({old_frameworks}) (yes/no)? ",
+        (
+            "Should we add a version of your new model in all the frameworks implemented by"
+            f" {old_model_type} ({old_frameworks}) (yes/no)? "
+        ),
         convert_to=convert_to_bool,
         default_value="yes",
         fallback_message="Please answer yes/no, y/n, true/false or 1/0.",

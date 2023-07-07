@@ -613,9 +613,11 @@ class Benchmark(ABC):
             self.config_dict = {model_name: config for model_name, config in zip(self.args.model_names, configs)}
 
         warnings.warn(
-            f"The class {self.__class__} is deprecated. Hugging Face Benchmarking utils"
-            " are deprecated in general and it is advised to use external Benchmarking libraries "
-            " to benchmark Transformer models.",
+            (
+                f"The class {self.__class__} is deprecated. Hugging Face Benchmarking utils"
+                " are deprecated in general and it is advised to use external Benchmarking libraries "
+                " to benchmark Transformer models."
+            ),
             FutureWarning,
         )
 
@@ -890,7 +892,6 @@ class Benchmark(ABC):
             return
         self.print_fn("Saving results to csv.")
         with open(filename, mode="w") as csv_file:
-
             assert len(self.args.model_names) > 0, f"At least 1 model should be defined, but got {self.model_names}"
 
             fieldnames = ["model", "batch_size", "sequence_length"]

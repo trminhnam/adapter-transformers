@@ -333,8 +333,10 @@ class OnnxConfig(ABC):
             raise ValueError("You cannot provide both a tokenizer and a preprocessor to generate dummy inputs.")
         if tokenizer is not None:
             warnings.warn(
-                "The `tokenizer` argument is deprecated and will be removed in version 5 of Transformers. Use"
-                " `preprocessor` instead.",
+                (
+                    "The `tokenizer` argument is deprecated and will be removed in version 5 of Transformers. Use"
+                    " `preprocessor` instead."
+                ),
                 FutureWarning,
             )
             logger.warning("Overwriting the `preprocessor` argument with `tokenizer` to generate dummmy inputs.")

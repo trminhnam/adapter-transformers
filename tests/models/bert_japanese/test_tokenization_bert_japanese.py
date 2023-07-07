@@ -36,7 +36,6 @@ from ...test_tokenization_common import TokenizerTesterMixin
 
 @custom_tokenizers
 class BertJapaneseTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
-
     tokenizer_class = BertJapaneseTokenizer
     test_rust_tokenizer = False
     space_between_special_tokens = True
@@ -328,7 +327,18 @@ class BertJapaneseTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
         )
 
     def test_wordpiece_tokenizer(self):
-        vocab_tokens = ["[UNK]", "[CLS]", "[SEP]", "こんにちは", "こん", "にちは", "ばんは", "##こん", "##にちは", "##ばんは"]
+        vocab_tokens = [
+            "[UNK]",
+            "[CLS]",
+            "[SEP]",
+            "こんにちは",
+            "こん",
+            "にちは",
+            "ばんは",
+            "##こん",
+            "##にちは",
+            "##ばんは",
+        ]
 
         vocab = {}
         for i, token in enumerate(vocab_tokens):
@@ -341,14 +351,18 @@ class BertJapaneseTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
 
         self.assertListEqual(tokenizer.tokenize("こんばんは"), ["こん", "##ばんは"])
 
-        self.assertListEqual(tokenizer.tokenize("こんばんは こんばんにちは こんにちは"), ["こん", "##ばんは", "[UNK]", "こんにちは"])
+        self.assertListEqual(
+            tokenizer.tokenize("こんばんは こんばんにちは こんにちは"), ["こん", "##ばんは", "[UNK]", "こんにちは"]
+        )
 
     def test_sentencepiece_tokenizer(self):
         tokenizer = BertJapaneseTokenizer.from_pretrained("nlp-waseda/roberta-base-japanese-with-auto-jumanpp")
         subword_tokenizer = tokenizer.subword_tokenizer
 
         tokens = subword_tokenizer.tokenize("国境 の 長い トンネル を 抜ける と 雪国 であった 。")
-        self.assertListEqual(tokens, ["▁国境", "▁の", "▁長い", "▁トンネル", "▁を", "▁抜ける", "▁と", "▁雪", "国", "▁であった", "▁。"])
+        self.assertListEqual(
+            tokens, ["▁国境", "▁の", "▁長い", "▁トンネル", "▁を", "▁抜ける", "▁と", "▁雪", "国", "▁であった", "▁。"]
+        )
 
         tokens = subword_tokenizer.tokenize("こんばんは こんばん にち は こんにちは")
         self.assertListEqual(tokens, ["▁こん", "ばん", "は", "▁こん", "ばん", "▁に", "ち", "▁は", "▁こんにちは"])
@@ -369,7 +383,6 @@ class BertJapaneseTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
 
 @custom_tokenizers
 class BertJapaneseCharacterTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
-
     tokenizer_class = BertJapaneseTokenizer
     test_rust_tokenizer = False
 
@@ -404,7 +417,27 @@ class BertJapaneseCharacterTokenizationTest(TokenizerTesterMixin, unittest.TestC
 
         tokens = tokenizer.tokenize("こんにちは、世界。 \nこんばんは、世界。")
         self.assertListEqual(
-            tokens, ["こ", "ん", "に", "ち", "は", "、", "世", "界", "。", "こ", "ん", "ば", "ん", "は", "、", "世", "界", "。"]
+            tokens,
+            [
+                "こ",
+                "ん",
+                "に",
+                "ち",
+                "は",
+                "、",
+                "世",
+                "界",
+                "。",
+                "こ",
+                "ん",
+                "ば",
+                "ん",
+                "は",
+                "、",
+                "世",
+                "界",
+                "。",
+            ],
         )
         self.assertListEqual(
             tokenizer.convert_tokens_to_ids(tokens), [3, 4, 5, 6, 7, 11, 9, 10, 12, 3, 4, 8, 4, 7, 11, 9, 10, 12]

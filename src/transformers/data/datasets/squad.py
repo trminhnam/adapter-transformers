@@ -220,7 +220,7 @@ class SquadDataset(Dataset):
             if self.args.version_2_with_negative:
                 inputs.update({"is_impossible": is_impossible})
             if self.is_language_sensitive:
-                inputs.update({"langs": (torch.ones(input_ids.shape, dtype=torch.int64) * self.args.lang_id)})
+                inputs.update({"langs": torch.ones(input_ids.shape, dtype=torch.int64) * self.args.lang_id})
 
         if self.mode == Split.train:
             start_positions = torch.tensor(feature.start_position, dtype=torch.long)

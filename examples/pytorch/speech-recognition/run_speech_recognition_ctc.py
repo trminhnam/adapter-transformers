@@ -682,10 +682,11 @@ def main():
         processor = AutoProcessor.from_pretrained(training_args.output_dir)
     except (OSError, KeyError):
         warnings.warn(
-            "Loading a processor from a feature extractor config that does not"
-            " include a `processor_class` attribute is deprecated and will be removed in v5. Please add the following "
-            " attribute to your `preprocessor_config.json` file to suppress this warning: "
-            " `'processor_class': 'Wav2Vec2Processor'`",
+            (
+                "Loading a processor from a feature extractor config that does not include a `processor_class`"
+                " attribute is deprecated and will be removed in v5. Please add the following  attribute to your"
+                " `preprocessor_config.json` file to suppress this warning:  `'processor_class': 'Wav2Vec2Processor'`"
+            ),
             FutureWarning,
         )
         processor = Wav2Vec2Processor.from_pretrained(training_args.output_dir)
@@ -708,7 +709,6 @@ def main():
 
     # Training
     if training_args.do_train:
-
         # use last checkpoint if exist
         if last_checkpoint is not None:
             checkpoint = last_checkpoint

@@ -395,15 +395,19 @@ class Mask2FormerImageProcessor(BaseImageProcessor):
     ):
         if "size_divisibility" in kwargs:
             warnings.warn(
-                "The `size_divisibility` argument is deprecated and will be removed in v4.27. Please use "
-                "`size_divisor` instead.",
+                (
+                    "The `size_divisibility` argument is deprecated and will be removed in v4.27. Please use "
+                    "`size_divisor` instead."
+                ),
                 FutureWarning,
             )
             size_divisor = kwargs.pop("size_divisibility")
         if "max_size" in kwargs:
             warnings.warn(
-                "The `max_size` argument is deprecated and will be removed in v4.27. Please use size['longest_edge']"
-                " instead.",
+                (
+                    "The `max_size` argument is deprecated and will be removed in v4.27. Please use"
+                    " size['longest_edge'] instead."
+                ),
                 FutureWarning,
             )
             # We make max_size a private attribute so we can pass it as a default value in the preprocess method whilst
@@ -444,8 +448,10 @@ class Mask2FormerImageProcessor(BaseImageProcessor):
     @property
     def size_divisibility(self):
         warnings.warn(
-            "The `size_divisibility` property is deprecated and will be removed in v4.27. Please use "
-            "`size_divisor` instead.",
+            (
+                "The `size_divisibility` property is deprecated and will be removed in v4.27. Please use "
+                "`size_divisor` instead."
+            ),
             FutureWarning,
         )
         return self.size_divisor
@@ -453,8 +459,10 @@ class Mask2FormerImageProcessor(BaseImageProcessor):
     @property
     def max_size(self):
         warnings.warn(
-            "The `max_size` property is deprecated and will be removed in v4.27. Please use size['longest_edge']"
-            " instead.",
+            (
+                "The `max_size` property is deprecated and will be removed in v4.27. Please use size['longest_edge']"
+                " instead."
+            ),
             FutureWarning,
         )
         return self.size["longest_edge"]
@@ -474,8 +482,10 @@ class Mask2FormerImageProcessor(BaseImageProcessor):
         """
         if "max_size" in kwargs:
             warnings.warn(
-                "The `max_size` parameter is deprecated and will be removed in v4.27. "
-                "Please specify in `size['longest_edge'] instead`.",
+                (
+                    "The `max_size` parameter is deprecated and will be removed in v4.27. "
+                    "Please specify in `size['longest_edge'] instead`."
+                ),
                 FutureWarning,
             )
             max_size = kwargs.pop("max_size")

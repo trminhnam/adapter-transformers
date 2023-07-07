@@ -55,7 +55,8 @@ class TextGenerationPipelineTests(unittest.TestCase, metaclass=PipelineTestCaseM
                 [
                     {
                         "generated_text": (
-                            "This is a test ☃ ☃ segmental segmental segmental 议议eski eski flutter flutter Lacy oscope."
+                            "This is a test ☃ ☃ segmental segmental segmental 议议eski eski flutter flutter Lacy"
+                            " oscope."
                             " oscope. FiliFili@@"
                         )
                     }

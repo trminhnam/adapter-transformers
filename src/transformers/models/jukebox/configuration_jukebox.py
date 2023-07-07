@@ -135,8 +135,12 @@ def enc_dec_with_lyrics(layer):
 
 ATTENTION_PATTERNS = {
     "full_dense_attention": full_dense_attention,
-    "raw_column_previous_row_attention": raw_column_previous_row_attention,  # Alternate row, column and previous row attn
-    "large_separated_enc_dec_w_lyrics": large_separated_enc_dec_w_lyrics,  # Used by large separated_enc_dec model with lyrics
+    "raw_column_previous_row_attention": (
+        raw_column_previous_row_attention
+    ),  # Alternate row, column and previous row attn
+    "large_separated_enc_dec_w_lyrics": (
+        large_separated_enc_dec_w_lyrics
+    ),  # Used by large separated_enc_dec model with lyrics
     "enc_dec_with_lyrics": enc_dec_with_lyrics,  # Used by encoder_decoder model with lyrics
 }
 
@@ -486,7 +490,6 @@ class JukeboxVQVAEConfig(PretrainedConfig):
 
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
-
         config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
 
         # get the text config dict if we are loading from CLIPConfig
@@ -576,7 +579,6 @@ class JukeboxConfig(PretrainedConfig):
         init_std=0.2,
         **kwargs,
     ):
-
         if vqvae_config is None:
             vqvae_config = {}
             logger.info("vqvae_config is None. initializing the JukeboxVQVAE with default values.")

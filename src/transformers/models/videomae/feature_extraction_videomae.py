@@ -26,8 +26,10 @@ logger = logging.get_logger(__name__)
 class VideoMAEFeatureExtractor(VideoMAEImageProcessor):
     def __init__(self, *args, **kwargs) -> None:
         warnings.warn(
-            "The class VideoMAEFeatureExtractor is deprecated and will be removed in version 5 of Transformers."
-            " Please use VideoMAEImageProcessor instead.",
+            (
+                "The class VideoMAEFeatureExtractor is deprecated and will be removed in version 5 of Transformers."
+                " Please use VideoMAEImageProcessor instead."
+            ),
             FutureWarning,
         )
         super().__init__(*args, **kwargs)

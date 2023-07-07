@@ -26,8 +26,10 @@ logger = logging.get_logger(__name__)
 class FlavaFeatureExtractor(FlavaImageProcessor):
     def __init__(self, *args, **kwargs) -> None:
         warnings.warn(
-            "The class FlavaFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please"
-            " use FlavaImageProcessor instead.",
+            (
+                "The class FlavaFeatureExtractor is deprecated and will be removed in version 5 of Transformers."
+                " Please use FlavaImageProcessor instead."
+            ),
             FutureWarning,
         )
         super().__init__(*args, **kwargs)

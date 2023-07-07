@@ -494,8 +494,10 @@ class LukeTokenizerIntegrationTests(unittest.TestCase):
         self.assertEqual(len(encoding["token_type_ids"]), 42)
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"], spaces_between_special_tokens=False),
-            "<s>Top seed Ana Ivanovic said on Thursday<ent> she<ent> could hardly believe her luck as a fortuitous"
-            " netcord helped the new world number one avoid a humiliating second- round exit at Wimbledon.</s>",
+            (
+                "<s>Top seed Ana Ivanovic said on Thursday<ent> she<ent> could hardly believe her luck as a fortuitous"
+                " netcord helped the new world number one avoid a humiliating second- round exit at Wimbledon.</s>"
+            ),
         )
         self.assertEqual(
             tokenizer.decode(encoding["input_ids"][9:12], spaces_between_special_tokens=False), "<ent> she<ent>"

@@ -418,7 +418,6 @@ class TapasTokenizer(PreTrainedTokenizer):
         split_tokens = []
         if self.do_basic_tokenize:
             for token in self.basic_tokenizer.tokenize(text, never_split=self.all_special_tokens):
-
                 # If the token is part of the never_split set
                 if token in self.basic_tokenizer.never_split:
                     split_tokens.append(token)
@@ -2783,8 +2782,10 @@ def filter_invalid_unicode_from_table(table):
             cell, is_invalid = filter_invalid_unicode(cell)
             if is_invalid:
                 logging.warning(
-                    f"Scrub an invalid table body @ table_id: {table.table_id}, row_index: {row_index}, "
-                    f"col_index: {col_index}",
+                    (
+                        f"Scrub an invalid table body @ table_id: {table.table_id}, row_index: {row_index}, "
+                        f"col_index: {col_index}"
+                    ),
                 )
     for col_index, column in enumerate(table.columns):
         column, is_invalid = filter_invalid_unicode(column)

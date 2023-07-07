@@ -1080,7 +1080,6 @@ class XLNetModel(XLNetPreTrainedModel):
         return_dict: Optional[bool] = None,
         **kwargs,  # delete after depreciation warning is removed
     ) -> Union[Tuple, XLNetModelOutput]:
-
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
@@ -1089,8 +1088,10 @@ class XLNetModel(XLNetPreTrainedModel):
 
         if "use_cache" in kwargs:
             warnings.warn(
-                "The `use_cache` argument is deprecated and will be removed in a future version, use `use_mems`"
-                " instead.",
+                (
+                    "The `use_cache` argument is deprecated and will be removed in a future version, use `use_mems`"
+                    " instead."
+                ),
                 FutureWarning,
             )
             use_mems = kwargs["use_cache"]

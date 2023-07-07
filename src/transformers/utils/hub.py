@@ -114,8 +114,10 @@ _default_endpoint = "https://hub-ci.huggingface.co" if _staging_mode else "https
 HUGGINGFACE_CO_RESOLVE_ENDPOINT = _default_endpoint
 if os.environ.get("HUGGINGFACE_CO_RESOLVE_ENDPOINT", None) is not None:
     warnings.warn(
-        "Using the environment variable `HUGGINGFACE_CO_RESOLVE_ENDPOINT` is deprecated and will be removed in "
-        "Transformers v5. Use `HF_ENDPOINT` instead.",
+        (
+            "Using the environment variable `HUGGINGFACE_CO_RESOLVE_ENDPOINT` is deprecated and will be removed in "
+            "Transformers v5. Use `HF_ENDPOINT` instead."
+        ),
         FutureWarning,
     )
     HUGGINGFACE_CO_RESOLVE_ENDPOINT = os.environ.get("HUGGINGFACE_CO_RESOLVE_ENDPOINT", None)

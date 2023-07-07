@@ -336,8 +336,10 @@ class XLMProphetNetSeq2SeqLMOutput(ModelOutput):
     @property
     def decoder_cross_attentions(self):
         warnings.warn(
-            "`decoder_cross_attentions` is deprecated and will be removed soon. Please use `cross_attentions`"
-            " instead.",
+            (
+                "`decoder_cross_attentions` is deprecated and will be removed soon. Please use `cross_attentions`"
+                " instead."
+            ),
             FutureWarning,
         )
         return self.cross_attentions
@@ -423,8 +425,10 @@ class XLMProphetNetSeq2SeqModelOutput(ModelOutput):
     @property
     def decoder_cross_attentions(self):
         warnings.warn(
-            "`decoder_cross_attentions` is deprecated and will be removed soon. Please use `cross_attentions`"
-            " instead.",
+            (
+                "`decoder_cross_attentions` is deprecated and will be removed soon. Please use `cross_attentions`"
+                " instead."
+            ),
             FutureWarning,
         )
         return self.cross_attentions
@@ -681,7 +685,6 @@ class XLMProphetNetAttention(nn.Module):
         past_key_value: Optional[Tuple[Tensor]] = None,
         output_attentions: bool = False,
     ) -> Tuple[Tensor, Optional[Tensor]]:
-
         batch_size, tgt_len, hidden_size = hidden_states.size()
 
         # if key_value_states are provided this layer is used as a cross-attention layer
@@ -1612,7 +1615,6 @@ class XLMProphetNetDecoder(XLMProphetNetPreTrainedModel):
             past_key_value = past_key_values[idx] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
@@ -2136,8 +2138,10 @@ class XLMProphetNetForConditionalGeneration(XLMProphetNetPreTrainedModel):
 
 
 @add_start_docstrings(
-    "The standalone decoder part of the XLMProphetNetModel with a lm head on top. The model can be used for causal"
-    " language modeling.",
+    (
+        "The standalone decoder part of the XLMProphetNetModel with a lm head on top. The model can be used for causal"
+        " language modeling."
+    ),
     XLM_PROPHETNET_START_DOCSTRING,
 )
 # Copied from transformers.models.prophetnet.modeling_prophetnet.ProphetNetForCausalLM with microsoft/prophetnet-large-uncased->patrickvonplaten/xprophetnet-large-uncased-standalone, ProphetNet->XLMProphetNet, PROPHETNET->XLM_PROPHETNET

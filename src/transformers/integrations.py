@@ -717,7 +717,6 @@ class WandbCallback(TrainerCallback):
                     init_args["name"] = args.run_name
 
             if self._wandb.run is None:
-
                 self._wandb.init(
                     project=os.getenv("WANDB_PROJECT", "huggingface"),
                     **init_args,
@@ -1047,13 +1046,11 @@ class MLflowCallback(TrainerCallback):
 
 class NeptuneMissingConfiguration(Exception):
     def __init__(self):
-        super().__init__(
-            """
+        super().__init__("""
         ------ Unsupported ---- We were not able to create new runs. You provided a custom Neptune run to
         `NeptuneCallback` with the `run` argument. For the integration to work fully, provide your `api_token` and
         `project` by saving them as environment variables or passing them to the callback.
-        """
-        )
+        """)
 
 
 class NeptuneCallback(TrainerCallback):

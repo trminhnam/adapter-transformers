@@ -329,7 +329,6 @@ def get_tiny_config(config_class, **model_tester_kwargs):
 
 
 def convert_tokenizer(tokenizer_fast: PreTrainedTokenizerFast):
-
     new_tokenizer = tokenizer_fast.train_new_from_iterator(training_ds["text"], TARGET_VOCAB_SIZE, show_progress=False)
 
     # Make sure it at least runs
@@ -340,7 +339,6 @@ def convert_tokenizer(tokenizer_fast: PreTrainedTokenizerFast):
 
 
 def convert_feature_extractor(feature_extractor, tiny_config):
-
     to_convert = False
     kwargs = {}
     if hasattr(tiny_config, "image_size"):
@@ -535,7 +533,6 @@ def upload_model(model_dir, organization):
         raise ValueError(error)
 
     with tempfile.TemporaryDirectory() as tmpdir:
-
         repo = Repository(local_dir=tmpdir, clone_from=f"{organization}/{repo_name}")
         repo.git_pull()
         shutil.copytree(model_dir, tmpdir, dirs_exist_ok=True)
@@ -560,7 +557,6 @@ def upload_model(model_dir, organization):
 
 
 def build_composite_models(config_class, output_dir):
-
     import tempfile
 
     from transformers import (
@@ -629,7 +625,6 @@ def build_composite_models(config_class, output_dir):
         tf_model_class = None
 
     with tempfile.TemporaryDirectory() as tmpdir:
-
         try:
             # build encoder
             models_to_create = {"processor": encoder_processor, "pytorch": (encoder_class,), "tensorflow": []}
@@ -722,7 +717,6 @@ def get_token_id_from_tokenizer(token_id_name, tokenizer, original_token_id):
 
 
 def get_config_overrides(config_class, processors):
-
     config_overrides = {}
 
     # Check if there is any tokenizer (prefer fast version if any)
@@ -951,7 +945,6 @@ def build(config_class, models_to_create, output_dir):
 
 
 def build_failed_report(results, include_warning=True):
-
     failed_results = {}
     for config_name in results:
         if "error" in results[config_name]:
@@ -982,7 +975,6 @@ def build_failed_report(results, include_warning=True):
 
 
 def build_simple_report(results):
-
     text = ""
     failed_text = ""
     for config_name in results:
@@ -1001,7 +993,6 @@ def build_simple_report(results):
 
 
 if __name__ == "__main__":
-
     clone_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     if os.getcwd() != clone_path:
         raise ValueError(f"This script should be run from the root of the clone of `transformers` {clone_path}")

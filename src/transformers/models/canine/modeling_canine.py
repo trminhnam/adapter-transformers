@@ -54,7 +54,7 @@ _CONFIG_FOR_DOC = "CanineConfig"
 
 CANINE_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "google/canine-s",
-    "google/canine-r"
+    "google/canine-r",
     # See all CANINE models at https://huggingface.co/models?filter=canine
 ]
 
@@ -312,7 +312,6 @@ class CharactersToMolecules(nn.Module):
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
     def forward(self, char_encoding: torch.Tensor) -> torch.Tensor:
-
         # `cls_encoding`: [batch, 1, hidden_size]
         cls_encoding = char_encoding[:, 0:1, :]
 

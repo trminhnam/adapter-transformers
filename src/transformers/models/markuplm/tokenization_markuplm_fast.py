@@ -321,6 +321,7 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             node_labels (`List[int]`, `List[List[int]]`, *optional*):
                 Node-level integer labels (for token classification tasks).
         """
+
         # Input type checking for clearer error
         def _is_valid_text_input(t):
             if isinstance(t, str):
@@ -615,9 +616,9 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
                 return_attention_mask=return_attention_mask,
                 return_overflowing_tokens=return_overflowing_tokens,
                 return_special_tokens_mask=return_special_tokens_mask,
-                return_offsets_mapping=True
-                if node_labels is not None
-                else return_offsets_mapping,  # we use offsets to create the labels
+                return_offsets_mapping=(
+                    True if node_labels is not None else return_offsets_mapping
+                ),  # we use offsets to create the labels
                 return_length=return_length,
                 verbose=verbose,
             )

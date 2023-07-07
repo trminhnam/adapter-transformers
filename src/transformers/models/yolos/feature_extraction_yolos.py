@@ -26,8 +26,10 @@ logger = logging.get_logger(__name__)
 class YolosFeatureExtractor(YolosImageProcessor):
     def __init__(self, *args, **kwargs) -> None:
         warnings.warn(
-            "The class YolosFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please"
-            " use YolosImageProcessor instead.",
+            (
+                "The class YolosFeatureExtractor is deprecated and will be removed in version 5 of Transformers."
+                " Please use YolosImageProcessor instead."
+            ),
             FutureWarning,
         )
         super().__init__(*args, **kwargs)

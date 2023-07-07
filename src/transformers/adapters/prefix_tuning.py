@@ -513,9 +513,11 @@ class PrefixTuningShim(AdapterLayerBase, nn.Module):
                 "key_states": key_states[i * orig_batch_size : (i + 1) * orig_batch_size],
                 "value_states": value_states[i * orig_batch_size : (i + 1) * orig_batch_size],
                 "residual_input": residual_input[i * orig_batch_size : (i + 1) * orig_batch_size],
-                "attention_mask": attention_mask[i * orig_batch_size : (i + 1) * orig_batch_size]
-                if attention_mask is not None
-                else None,
+                "attention_mask": (
+                    attention_mask[i * orig_batch_size : (i + 1) * orig_batch_size]
+                    if attention_mask is not None
+                    else None
+                ),
                 "invert_mask": invert_mask,
                 "idx_range": idx_range,
             }

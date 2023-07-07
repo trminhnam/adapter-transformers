@@ -358,7 +358,6 @@ def convert_all_pt_checkpoints_to_tf(
     remove_cached_files=False,
     only_convert_finetuned_models=False,
 ):
-
     if args_model_type is None:
         model_types = list(MODEL_CLASSES.keys())
     else:
@@ -482,9 +481,9 @@ if __name__ == "__main__":
     convert_all_pt_checkpoints_to_tf(
         args.model_type.lower() if args.model_type is not None else None,
         args.tf_dump_path,
-        model_shortcut_names_or_path=[args.pytorch_checkpoint_path]
-        if args.pytorch_checkpoint_path is not None
-        else None,
+        model_shortcut_names_or_path=(
+            [args.pytorch_checkpoint_path] if args.pytorch_checkpoint_path is not None else None
+        ),
         config_shortcut_names_or_path=[args.config_file] if args.config_file is not None else None,
         compare_with_pt_model=args.compare_with_pt_model,
         use_cached_models=args.use_cached_models,

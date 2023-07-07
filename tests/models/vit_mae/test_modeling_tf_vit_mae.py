@@ -266,7 +266,6 @@ class TFViTMAEModelTest(TFModelTesterMixin, unittest.TestCase):
     # overwrite from common since TFViTMAEForPretraining has random masking, we need to fix the noise
     # to generate masks during test
     def check_pt_tf_models(self, tf_model, pt_model, tf_inputs_dict):
-
         # make masks reproducible
         np.random.seed(2)
 
@@ -440,10 +439,8 @@ class TFViTMAEModelTest(TFModelTesterMixin, unittest.TestCase):
 
             self.assert_outputs_same(after_outputs, outputs)
 
-    @unittest.skip(
-        reason="""ViTMAE returns a random mask + ids_restore in each forward pass. See test_save_load
-    to get deterministic results."""
-    )
+    @unittest.skip(reason="""ViTMAE returns a random mask + ids_restore in each forward pass. See test_save_load
+    to get deterministic results.""")
     def test_determinism(self):
         pass
 
@@ -453,7 +450,6 @@ class TFViTMAEModelTest(TFModelTesterMixin, unittest.TestCase):
 
     @slow
     def test_model_from_pretrained(self):
-
         model = TFViTMAEModel.from_pretrained("google/vit-base-patch16-224")
         self.assertIsNotNone(model)
 

@@ -586,7 +586,6 @@ class LukeModelTester:
 
 @require_torch
 class LukeModelTest(ModelTesterMixin, unittest.TestCase):
-
     all_model_classes = (
         (
             LukeModel,
@@ -614,9 +613,11 @@ class LukeModelTest(ModelTesterMixin, unittest.TestCase):
         inputs_dict = super()._prepare_for_class(inputs_dict, model_class, return_labels=return_labels)
         if model_class == LukeForMultipleChoice:
             entity_inputs_dict = {
-                k: v.unsqueeze(1).expand(-1, self.model_tester.num_choices, -1).contiguous()
-                if v.ndim == 2
-                else v.unsqueeze(1).expand(-1, self.model_tester.num_choices, -1, -1).contiguous()
+                k: (
+                    v.unsqueeze(1).expand(-1, self.model_tester.num_choices, -1).contiguous()
+                    if v.ndim == 2
+                    else v.unsqueeze(1).expand(-1, self.model_tester.num_choices, -1, -1).contiguous()
+                )
                 for k, v in entity_inputs_dict.items()
             }
         inputs_dict.update(entity_inputs_dict)

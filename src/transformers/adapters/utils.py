@@ -284,7 +284,6 @@ def get_from_cache(
     # Prevent parallel downloads of the same file with a lock.
     lock_path = cache_path + ".lock"
     with FileLock(lock_path):
-
         # If the download just completed while the lock was activated.
         if os.path.exists(cache_path) and not force_download:
             # Even if returning early like here, the lock will be released.
@@ -769,9 +768,9 @@ def list_adapters(source: str = None, model_name: str = None) -> List[AdapterInf
             adapter_info = AdapterInfo(
                 source="hf",
                 adapter_id=model_info.modelId,
-                model_name=model_info.config.get("adapter_transformers", {}).get("model_name")
-                if model_info.config
-                else None,
+                model_name=(
+                    model_info.config.get("adapter_transformers", {}).get("model_name") if model_info.config else None
+                ),
                 username=model_info.modelId.split("/")[0],
                 sha1_checksum=model_info.sha,
             )
@@ -810,9 +809,9 @@ def get_adapter_info(adapter_id: str, source: str = "ah") -> Optional[AdapterInf
             return AdapterInfo(
                 source="hf",
                 adapter_id=model_info.modelId,
-                model_name=model_info.config.get("adapter_transformers", {}).get("model_name")
-                if model_info.config
-                else None,
+                model_name=(
+                    model_info.config.get("adapter_transformers", {}).get("model_name") if model_info.config else None
+                ),
                 username=model_info.modelId.split("/")[0],
                 sha1_checksum=model_info.sha,
             )

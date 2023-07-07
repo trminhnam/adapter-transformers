@@ -562,7 +562,6 @@ class ElectraEncoder(nn.Module):
             past_key_value = past_key_values[i] if past_key_values is not None else None
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
@@ -802,11 +801,12 @@ ELECTRA_INPUTS_DOCSTRING = r"""
 
 
 @add_start_docstrings(
-    "The bare Electra Model transformer outputting raw hidden-states without any specific head on top. Identical to "
-    "the BERT model except that it uses an additional linear layer between the embedding layer and the encoder if the "
-    "hidden size and embedding size are different. "
-    ""
-    "Both the generator and discriminator checkpoints may be loaded into this model.",
+    (
+        "The bare Electra Model transformer outputting raw hidden-states without any specific head on top. Identical"
+        " to the BERT model except that it uses an additional linear layer between the embedding layer and the encoder"
+        " if the hidden size and embedding size are different. Both the generator and discriminator checkpoints may be"
+        " loaded into this model."
+    ),
     ELECTRA_START_DOCSTRING,
 )
 class ElectraModel(ElectraPreTrainedModel):

@@ -1054,8 +1054,10 @@ class TFXLMForMultipleChoice(TFXLMPreTrainedModel, TFMultipleChoiceLoss):
 
         if lengths is not None:
             logger.warning(
-                "The `lengths` parameter cannot be used with the XLM multiple choice models. Please use the "
-                "attention mask instead.",
+                (
+                    "The `lengths` parameter cannot be used with the XLM multiple choice models. Please use the "
+                    "attention mask instead."
+                ),
             )
             lengths = None
 

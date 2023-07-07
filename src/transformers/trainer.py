@@ -311,8 +311,9 @@ class Trainer:
             logger.info(f"No `TrainingArguments` passed, using `output_dir={output_dir}`.")
             args = TrainingArguments(output_dir=output_dir)
         self.args = args
-        # Seed must be set before instantiating the model when using model
-        enable_full_determinism(self.args.seed) if self.args.full_determinism else set_seed(self.args.seed)
+        (  # Seed must be set before instantiating the model when using model
+            enable_full_determinism(self.args.seed) if self.args.full_determinism else set_seed(self.args.seed)
+        )
         self.hp_name = None
         self.deepspeed = None
         self.is_in_train = False
@@ -337,9 +338,11 @@ class Trainer:
         else:
             if model_init is not None:
                 warnings.warn(
-                    "`Trainer` requires either a `model` or `model_init` argument, but not both. `model_init` will"
-                    " overwrite your model when calling the `train` method. This will become a fatal error in the next"
-                    " release.",
+                    (
+                        "`Trainer` requires either a `model` or `model_init` argument, but not both. `model_init` will"
+                        " overwrite your model when calling the `train` method. This will become a fatal error in the"
+                        " next release."
+                    ),
                     FutureWarning,
                 )
             self.model_init = model_init
@@ -1502,8 +1505,10 @@ class Trainer:
         if "model_path" in kwargs:
             resume_from_checkpoint = kwargs.pop("model_path")
             warnings.warn(
-                "`model_path` is deprecated and will be removed in a future version. Use `resume_from_checkpoint` "
-                "instead.",
+                (
+                    "`model_path` is deprecated and will be removed in a future version. Use `resume_from_checkpoint` "
+                    "instead."
+                ),
                 FutureWarning,
             )
         if len(kwargs) > 0:
@@ -1515,8 +1520,9 @@ class Trainer:
         # Model re-init
         model_reloaded = False
         if self.model_init is not None:
-            # Seed must be set before instantiating the model when using model_init.
-            enable_full_determinism(self.args.seed) if self.args.full_determinism else set_seed(self.args.seed)
+            (  # Seed must be set before instantiating the model when using model_init.
+                enable_full_determinism(self.args.seed) if self.args.full_determinism else set_seed(self.args.seed)
+            )
             self.model = self.call_model_init(trial)
             model_reloaded = True
             # Reinitializes optimizer and scheduler
@@ -1763,7 +1769,6 @@ class Trainer:
 
             step = -1
             for step, inputs in enumerate(epoch_iterator):
-
                 # Skip past any already trained steps if resuming training
                 if steps_trained_in_current_epoch > 0:
                     steps_trained_in_current_epoch -= 1
@@ -1960,7 +1965,6 @@ class Trainer:
         return run_dir
 
     def _load_from_checkpoint(self, resume_from_checkpoint, model=None):
-
         if model is None:
             model = self.model
 
@@ -2027,7 +2031,6 @@ class Trainer:
         model = self.model_wrapped if is_sagemaker_mp_enabled() else self.model
         if os.path.exists(best_model_path):
             if self.deepspeed:
-
                 if self.model_wrapped is not None:
                     # this removes the pre-hooks from the previous engine
                     self.model_wrapped.destroy()
@@ -2083,7 +2086,6 @@ class Trainer:
             )
 
     def _issue_warnings_after_load(self, load_result):
-
         if len(load_result.missing_keys) != 0:
             if self.model._keys_to_ignore_on_save is not None and set(load_result.missing_keys) == set(
                 self.model._keys_to_ignore_on_save
@@ -2640,7 +2642,6 @@ class Trainer:
             if self.args.should_save:
                 self._save(output_dir, state_dict=state_dict)
         elif self.deepspeed:
-
             # this takes care of everything as long as we aren't under zero3
             if self.args.should_save:
                 self._save(output_dir)
@@ -2939,7 +2940,6 @@ class Trainer:
 
         # if eval is called w/o train init deepspeed here
         if args.deepspeed and not self.deepspeed:
-
             # XXX: eval doesn't have `resume_from_checkpoint` arg but we should be able to do eval
             # from the checkpoint eventually
             deepspeed_engine, _, _ = deepspeed_init(

@@ -952,7 +952,6 @@ class ModuleUtilsMixin:
 
 class BackboneMixin:
     def forward_with_filtered_kwargs(self, *args, **kwargs):
-
         signature = dict(inspect.signature(self.forward).parameters)
         filtered_kwargs = {k: v for k, v in kwargs.items() if k in signature}
 
@@ -1611,8 +1610,10 @@ class PreTrainedModel(nn.Module, ModuleUtilsMixin, GenerationMixin, PushToHubMix
         # Checks if the model has been loaded in 8-bit
         if getattr(self, "is_loaded_in_8bit", False):
             warnings.warn(
-                "You are calling `save_pretrained` to a 8-bit converted model you may likely encounter unexepected"
-                " behaviors. ",
+                (
+                    "You are calling `save_pretrained` to a 8-bit converted model you may likely encounter unexepected"
+                    " behaviors. "
+                ),
                 UserWarning,
             )
 
@@ -2422,13 +2423,11 @@ class PreTrainedModel(nn.Module, ModuleUtilsMixin, GenerationMixin, PushToHubMix
                     key: device_map[key] for key in device_map.keys() if key not in modules_to_not_convert
                 }
                 if "cpu" in device_map_without_lm_head.values() or "disk" in device_map_without_lm_head.values():
-                    raise ValueError(
-                        """
+                    raise ValueError("""
                         Some modules are dispatched on the CPU or the disk. Make sure you have enough GPU RAM to fit
                         the quantized model. If you have set a value for `max_memory` you should increase that. To have
                         an idea of the modules that are set on the CPU or RAM you can print model.hf_device_map.
-                        """
-                    )
+                        """)
                 del device_map_without_lm_head
 
         if from_tf:
@@ -2463,7 +2462,6 @@ class PreTrainedModel(nn.Module, ModuleUtilsMixin, GenerationMixin, PushToHubMix
                 )
                 raise
         elif from_pt:
-
             # restore default dtype
             if dtype_orig is not None:
                 torch.set_default_dtype(dtype_orig)

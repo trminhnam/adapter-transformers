@@ -266,9 +266,11 @@ class CustomDPRReaderTokenizerMixin:
         encoded_texts = super().__call__(texts, add_special_tokens=False, padding=False, truncation=False)["input_ids"]
         encoded_inputs = {
             "input_ids": [
-                (encoded_question_and_title + encoded_text)[:max_length]
-                if max_length is not None and truncation
-                else encoded_question_and_title + encoded_text
+                (
+                    (encoded_question_and_title + encoded_text)[:max_length]
+                    if max_length is not None and truncation
+                    else encoded_question_and_title + encoded_text
+                )
                 for encoded_question_and_title, encoded_text in zip(encoded_question_and_titles, encoded_texts)
             ]
         }
