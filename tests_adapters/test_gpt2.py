@@ -48,7 +48,7 @@ class GPT2AdapterTest(
     PredictionHeadModelTestMixin,
     ParallelAdapterInferenceTestMixin,
     ParallelTrainingMixin,
-    ConfigUnionAdapterTest, 
+    ConfigUnionAdapterTest,
     GPT2AdapterTestBase,
     unittest.TestCase,
 ):

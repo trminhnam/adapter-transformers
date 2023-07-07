@@ -28,5 +28,6 @@ class BloomModelAdapterMixin(EmbeddingAdaptersMixin, InvertibleAdaptersMixin, Mo
         for i, layer in enumerate(self.base_model.h):
             yield i, layer
 
+
 class BloomModelWithHeadsAdaptersMixin(EmbeddingAdaptersWrapperMixin, ModelWithHeadsAdaptersMixin):
     pass
