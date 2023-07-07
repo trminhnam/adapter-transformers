@@ -2626,6 +2626,8 @@ if is_torch_available():
         "get_adapter_info",
         "list_adapters",
         "setup_adapter_training",
+        "BloomAdapterModel",
+        "BloomModelWithHeads",
     ]
 
 # TensorFlow-backed objects
@@ -5730,6 +5732,8 @@ if TYPE_CHECKING:
             get_adapter_info,
             list_adapters,
             setup_adapter_training,
+            BloomAdapterModel,
+            BloomModelWithHeads,
         )
 
     # TensorFlow
