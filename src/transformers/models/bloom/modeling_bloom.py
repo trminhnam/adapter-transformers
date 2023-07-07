@@ -37,7 +37,7 @@ from ...adapters.mixins.bloom import (
 # from ...adapters.model_mixin import ModelWithHeadsAdaptersMixin
 from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward
 
-# from ...adapters.prefix_tuning import PrefixTuningShim
+from ...adapters.prefix_tuning import PrefixTuningShim
 from ...modeling_outputs import (
     BaseModelOutputWithPastAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
@@ -249,6 +249,9 @@ class BloomAttention(nn.Module):
         self.dense = nn.Linear(self.hidden_size, self.hidden_size)
         self.attention_dropout = nn.Dropout(config.attention_dropout)
 
+        location_key = "self_prefix"  # "cross_prefix" if self.is_cross_attention else "self_prefix"
+        self.prefix_tuning = PrefixTuningShim(location_key, config)
+
     def _split_heads(self, fused_qkv: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Split the last dimension into (num_heads, head_dim) without making any copies, results share same memory
@@ -325,6 +328,10 @@ class BloomAttention(nn.Module):
             present = (key_layer, value_layer)
         else:
             present = None
+
+        key_layer, value_layer, attention_mask = self.prefix_tuning(
+            key_layer, value_layer, hidden_states, attention_mask
+        )
 
         # [batch_size * num_heads, q_length, kv_length]
         # we use `torch.Tensor.baddbmm` instead of `torch.baddbmm` as the latter isn't supported by TorchScript v1.11
@@ -1238,8 +1245,10 @@ class BloomForQuestionAnswering(BloomModelWithHeadsAdaptersMixin, BloomPreTraine
 
     def __init__(self, config):
         super().__init__(config)
+        self.num_labels = 2  # config.num_labels
+
         self.transformer = BloomModel(config)
-        self.qa_outputs = nn.Linear(config.hidden_size, 2)
+        self.qa_outputs = nn.Linear(config.hidden_size, self.num_labels)
 
         # Initialize weights and apply final processing
         self.post_init()
