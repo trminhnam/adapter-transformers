@@ -237,7 +237,6 @@ if TYPE_CHECKING:
         get_adapter_info,
         list_adapters,
     )
-    
     from .models.bloom import BloomAdapterModel, BloomModelWithHeads
 
 
