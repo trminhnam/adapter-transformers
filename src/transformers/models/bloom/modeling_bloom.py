@@ -24,14 +24,13 @@ from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, LayerNorm, MSELoss
 from torch.nn import functional as F
 
-from ...adapters.composition import adjust_tensors_for_parallel
+# from ...adapters.composition import adjust_tensors_for_parallel
 from ...adapters.context import ForwardContext
 from ...adapters.lora import Linear as LoRALinear
 from ...adapters.lora import MergedLinear as LoRAMergedLinear
-from ...adapters.mixins.bloom import (
+from ...adapters.mixins.bloom import (  # BloomModelWithHeadsAdaptersMixin,
     BloomDecoderBlockAdaptersMixin,
     BloomModelAdapterMixin,
-    BloomModelWithHeadsAdaptersMixin,
 )
 from ...adapters.model_mixin import ModelWithHeadsAdaptersMixin
 from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward

@@ -5689,6 +5689,8 @@ if TYPE_CHECKING:
             BertAdapterModel,
             BertGenerationAdapterModel,
             BertModelWithHeads,
+            BloomAdapterModel,
+            BloomModelWithHeads,
             CompacterConfig,
             CompacterPlusPlusConfig,
             ConfigUnion,
@@ -5732,8 +5734,6 @@ if TYPE_CHECKING:
             get_adapter_info,
             list_adapters,
             setup_adapter_training,
-            BloomAdapterModel,
-            BloomModelWithHeads,
         )
 
     # TensorFlow

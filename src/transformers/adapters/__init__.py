@@ -217,6 +217,7 @@ if TYPE_CHECKING:
     from .models.beit import BeitAdapterModel
     from .models.bert import BertAdapterModel, BertModelWithHeads
     from .models.bert_generation import BertGenerationAdapterModel
+    from .models.bloom import BloomAdapterModel, BloomModelWithHeads
     from .models.deberta import DebertaAdapterModel
     from .models.debertaV2 import DebertaV2AdapterModel
     from .models.distilbert import DistilBertAdapterModel, DistilBertModelWithHeads
@@ -237,7 +238,6 @@ if TYPE_CHECKING:
         get_adapter_info,
         list_adapters,
     )
-    from .models.bloom import BloomAdapterModel, BloomModelWithHeads
 
 
 else:

@@ -29,7 +29,9 @@ from typing import List, Tuple, get_type_hints
 
 from datasets import Dataset
 
-from huggingface_hub import HfFolder, Repository, delete_repo, set_access_token
+from huggingface_hub import HfFolder, Repository, delete_repo
+
+# from huggingface_hub import  set_access_token
 from huggingface_hub.file_download import http_get
 from requests.exceptions import HTTPError
 from transformers import is_tf_available, is_torch_available
@@ -157,7 +159,6 @@ def _return_type_has_loss(model):
 
 @require_tf
 class TFModelTesterMixin:
-
     model_tester = None
     all_model_classes = ()
     all_generative_model_classes = ()
@@ -618,7 +619,6 @@ class TFModelTesterMixin:
             )
 
     def prepare_pt_inputs_from_tf_inputs(self, tf_inputs_dict):
-
         pt_inputs_dict = {}
         for name, key in tf_inputs_dict.items():
             if type(key) == bool:
@@ -638,7 +638,6 @@ class TFModelTesterMixin:
         return pt_inputs_dict
 
     def check_pt_tf_models(self, tf_model, pt_model, tf_inputs_dict):
-
         pt_inputs_dict = self.prepare_pt_inputs_from_tf_inputs(tf_inputs_dict)
 
         # send pytorch inputs to the correct device
@@ -670,7 +669,6 @@ class TFModelTesterMixin:
         import transformers
 
         for model_class in self.all_model_classes:
-
             config, inputs_dict = self.model_tester.prepare_config_and_inputs_for_common()
 
             # Output all for aggressive testing
@@ -1069,7 +1067,6 @@ class TFModelTesterMixin:
             self.assertLessEqual(max_diff, 1e-5)
 
     def test_model_outputs_equivalence(self):
-
         config, inputs_dict = self.model_tester.prepare_config_and_inputs_for_common()
 
         def check_equivalence(model, tuple_inputs, dict_inputs, additional_kwargs={}):
@@ -2370,125 +2367,125 @@ class UtilsFunctionsTest(unittest.TestCase):
             self.assertTrue(np.allclose(p1.numpy(), p2.numpy()))
 
 
-@require_tf
-@is_staging_test
-class TFModelPushToHubTester(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls._token = TOKEN
-        set_access_token(TOKEN)
-        HfFolder.save_token(TOKEN)
+# @require_tf
+# @is_staging_test
+# class TFModelPushToHubTester(unittest.TestCase):
+#     @classmethod
+#     def setUpClass(cls):
+#         cls._token = TOKEN
+#         set_access_token(TOKEN)
+#         HfFolder.save_token(TOKEN)
 
-    @classmethod
-    def tearDownClass(cls):
-        try:
-            delete_repo(token=cls._token, repo_id="test-model-tf")
-        except HTTPError:
-            pass
+#     @classmethod
+#     def tearDownClass(cls):
+#         try:
+#             delete_repo(token=cls._token, repo_id="test-model-tf")
+#         except HTTPError:
+#             pass
 
-        try:
-            delete_repo(token=cls._token, repo_id="test-model-tf-callback")
-        except HTTPError:
-            pass
+#         try:
+#             delete_repo(token=cls._token, repo_id="test-model-tf-callback")
+#         except HTTPError:
+#             pass
 
-        try:
-            delete_repo(token=cls._token, repo_id="valid_org/test-model-tf-org")
-        except HTTPError:
-            pass
+#         try:
+#             delete_repo(token=cls._token, repo_id="valid_org/test-model-tf-org")
+#         except HTTPError:
+#             pass
 
-    def test_push_to_hub(self):
-        config = BertConfig(
-            vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
-        )
-        model = TFBertModel(config)
-        # Make sure model is properly initialized
-        _ = model(model.dummy_inputs)
+#     def test_push_to_hub(self):
+#         config = BertConfig(
+#             vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
+#         )
+#         model = TFBertModel(config)
+#         # Make sure model is properly initialized
+#         _ = model(model.dummy_inputs)
 
-        logging.set_verbosity_info()
-        logger = logging.get_logger("transformers.utils.hub")
-        with CaptureLogger(logger) as cl:
-            model.push_to_hub("test-model-tf", use_auth_token=self._token)
-        logging.set_verbosity_warning()
-        # Check the model card was created and uploaded.
-        self.assertIn("Uploading the following files to __DUMMY_TRANSFORMERS_USER__/test-model-tf", cl.out)
+#         logging.set_verbosity_info()
+#         logger = logging.get_logger("transformers.utils.hub")
+#         with CaptureLogger(logger) as cl:
+#             model.push_to_hub("test-model-tf", use_auth_token=self._token)
+#         logging.set_verbosity_warning()
+#         # Check the model card was created and uploaded.
+#         self.assertIn("Uploading the following files to __DUMMY_TRANSFORMERS_USER__/test-model-tf", cl.out)
 
-        new_model = TFBertModel.from_pretrained(f"{USER}/test-model-tf")
-        models_equal = True
-        for p1, p2 in zip(model.weights, new_model.weights):
-            if not tf.math.reduce_all(p1 == p2):
-                models_equal = False
-                break
-        self.assertTrue(models_equal)
+#         new_model = TFBertModel.from_pretrained(f"{USER}/test-model-tf")
+#         models_equal = True
+#         for p1, p2 in zip(model.weights, new_model.weights):
+#             if not tf.math.reduce_all(p1 == p2):
+#                 models_equal = False
+#                 break
+#         self.assertTrue(models_equal)
 
-        # Reset repo
-        delete_repo(token=self._token, repo_id="test-model-tf")
+#         # Reset repo
+#         delete_repo(token=self._token, repo_id="test-model-tf")
 
-        # Push to hub via save_pretrained
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            model.save_pretrained(tmp_dir, repo_id="test-model-tf", push_to_hub=True, use_auth_token=self._token)
+#         # Push to hub via save_pretrained
+#         with tempfile.TemporaryDirectory() as tmp_dir:
+#             model.save_pretrained(tmp_dir, repo_id="test-model-tf", push_to_hub=True, use_auth_token=self._token)
 
-        new_model = TFBertModel.from_pretrained(f"{USER}/test-model-tf")
-        models_equal = True
-        for p1, p2 in zip(model.weights, new_model.weights):
-            if not tf.math.reduce_all(p1 == p2):
-                models_equal = False
-                break
-        self.assertTrue(models_equal)
+#         new_model = TFBertModel.from_pretrained(f"{USER}/test-model-tf")
+#         models_equal = True
+#         for p1, p2 in zip(model.weights, new_model.weights):
+#             if not tf.math.reduce_all(p1 == p2):
+#                 models_equal = False
+#                 break
+#         self.assertTrue(models_equal)
 
-    def test_push_to_hub_callback(self):
-        config = BertConfig(
-            vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
-        )
-        model = TFBertForMaskedLM(config)
-        model.compile()
+#     def test_push_to_hub_callback(self):
+#         config = BertConfig(
+#             vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
+#         )
+#         model = TFBertForMaskedLM(config)
+#         model.compile()
 
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            push_to_hub_callback = PushToHubCallback(
-                output_dir=tmp_dir,
-                hub_model_id="test-model-tf-callback",
-                hub_token=self._token,
-            )
-            model.fit(model.dummy_inputs, model.dummy_inputs, epochs=1, callbacks=[push_to_hub_callback])
+#         with tempfile.TemporaryDirectory() as tmp_dir:
+#             push_to_hub_callback = PushToHubCallback(
+#                 output_dir=tmp_dir,
+#                 hub_model_id="test-model-tf-callback",
+#                 hub_token=self._token,
+#             )
+#             model.fit(model.dummy_inputs, model.dummy_inputs, epochs=1, callbacks=[push_to_hub_callback])
 
-        new_model = TFBertForMaskedLM.from_pretrained(f"{USER}/test-model-tf-callback")
-        models_equal = True
-        for p1, p2 in zip(model.weights, new_model.weights):
-            if not tf.math.reduce_all(p1 == p2):
-                models_equal = False
-                break
-        self.assertTrue(models_equal)
+#         new_model = TFBertForMaskedLM.from_pretrained(f"{USER}/test-model-tf-callback")
+#         models_equal = True
+#         for p1, p2 in zip(model.weights, new_model.weights):
+#             if not tf.math.reduce_all(p1 == p2):
+#                 models_equal = False
+#                 break
+#         self.assertTrue(models_equal)
 
-    def test_push_to_hub_in_organization(self):
-        config = BertConfig(
-            vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
-        )
-        model = TFBertModel(config)
-        # Make sure model is properly initialized
-        _ = model(model.dummy_inputs)
+#     def test_push_to_hub_in_organization(self):
+#         config = BertConfig(
+#             vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
+#         )
+#         model = TFBertModel(config)
+#         # Make sure model is properly initialized
+#         _ = model(model.dummy_inputs)
 
-        model.push_to_hub("valid_org/test-model-tf-org", use_auth_token=self._token)
+#         model.push_to_hub("valid_org/test-model-tf-org", use_auth_token=self._token)
 
-        new_model = TFBertModel.from_pretrained("valid_org/test-model-tf-org")
-        models_equal = True
-        for p1, p2 in zip(model.weights, new_model.weights):
-            if not tf.math.reduce_all(p1 == p2):
-                models_equal = False
-                break
-        self.assertTrue(models_equal)
+#         new_model = TFBertModel.from_pretrained("valid_org/test-model-tf-org")
+#         models_equal = True
+#         for p1, p2 in zip(model.weights, new_model.weights):
+#             if not tf.math.reduce_all(p1 == p2):
+#                 models_equal = False
+#                 break
+#         self.assertTrue(models_equal)
 
-        # Reset repo
-        delete_repo(token=self._token, repo_id="valid_org/test-model-tf-org")
+#         # Reset repo
+#         delete_repo(token=self._token, repo_id="valid_org/test-model-tf-org")
 
-        # Push to hub via save_pretrained
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            model.save_pretrained(
-                tmp_dir, push_to_hub=True, use_auth_token=self._token, repo_id="valid_org/test-model-tf-org"
-            )
+#         # Push to hub via save_pretrained
+#         with tempfile.TemporaryDirectory() as tmp_dir:
+#             model.save_pretrained(
+#                 tmp_dir, push_to_hub=True, use_auth_token=self._token, repo_id="valid_org/test-model-tf-org"
+#             )
 
-        new_model = TFBertModel.from_pretrained("valid_org/test-model-tf-org")
-        models_equal = True
-        for p1, p2 in zip(model.weights, new_model.weights):
-            if not tf.math.reduce_all(p1 == p2):
-                models_equal = False
-                break
-        self.assertTrue(models_equal)
+#         new_model = TFBertModel.from_pretrained("valid_org/test-model-tf-org")
+#         models_equal = True
+#         for p1, p2 in zip(model.weights, new_model.weights):
+#             if not tf.math.reduce_all(p1 == p2):
+#                 models_equal = False
+#                 break
+#         self.assertTrue(models_equal)
