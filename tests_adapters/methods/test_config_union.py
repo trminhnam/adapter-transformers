@@ -1,5 +1,12 @@
 from tests_adapters.methods.base import AdapterMethodBaseTestMixin
-from transformers.adapters.configuration import CompacterConfig, ConfigUnion, ParallelConfig, PrefixTuningConfig, LoRAConfig, PfeifferConfig
+from transformers.adapters.configuration import (
+    CompacterConfig,
+    ConfigUnion,
+    LoRAConfig,
+    ParallelConfig,
+    PfeifferConfig,
+    PrefixTuningConfig,
+)
 from transformers.testing_utils import require_torch
 
 

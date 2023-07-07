@@ -17,7 +17,7 @@ from transformers import (
 )
 from transformers.adapters.composition import Fuse, Stack
 from transformers.adapters.trainer import AdapterTrainer, logger
-from transformers.testing_utils import slow, require_ray
+from transformers.testing_utils import require_ray, slow
 
 
 class TestAdapterTrainer(unittest.TestCase):

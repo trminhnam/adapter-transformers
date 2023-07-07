@@ -11,8 +11,8 @@ from transformers import (
     TrainingArguments,
 )
 from transformers.adapters import ADAPTER_MODEL_MAPPING, PfeifferConfig, PrefixTuningConfig
-from transformers.adapters.models.bert_generation.adapter_model import BertGenerationAdapterModel
 from transformers.adapters.composition import BatchSplit, Parallel
+from transformers.adapters.models.bert_generation.adapter_model import BertGenerationAdapterModel
 from transformers.testing_utils import require_torch, torch_device
 
 

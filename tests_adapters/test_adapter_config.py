@@ -8,11 +8,11 @@ from transformers import (
     AdapterConfigBase,
     ConfigUnion,
     HoulsbyConfig,
+    LoRAConfig,
     MAMConfig,
     ParallelConfig,
     PfeifferConfig,
     PrefixTuningConfig,
-    LoRAConfig,
 )
 from transformers.testing_utils import require_torch
 

@@ -5,7 +5,6 @@ import torch
 
 # from ....models.gpt2.modeling_gpt2 import GPT2_START_DOCSTRING, GPT2Model, GPT2PreTrainedModel
 from ....models.bloom.modeling_bloom import BLOOM_START_DOCSTRING, BloomModel, BloomPreTrainedModel
-
 from ....utils import add_start_docstrings
 from ...composition import adjust_tensors_for_parallel
 from ...heads import (

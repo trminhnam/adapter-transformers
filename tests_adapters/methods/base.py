@@ -5,8 +5,8 @@ import tempfile
 import torch
 
 from transformers import AutoTokenizer, TrainingArguments
-from transformers.adapters.heads import CausalLMHead
 from transformers.adapters import ADAPTER_MODEL_MAPPING, AdapterSetup, AdapterTrainer, AutoAdapterModel
+from transformers.adapters.heads import CausalLMHead
 from transformers.adapters.utils import WEIGHTS_NAME
 from transformers.testing_utils import require_torch, torch_device
 
