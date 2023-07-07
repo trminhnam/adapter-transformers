@@ -328,10 +328,10 @@ class BloomAttention(nn.Module):
             present = None
 
         # add code for prefix tuning
-        key_layer, value_layer, attention_mask = self.prefix_tuning(
-            key_layer, value_layer, hidden_states, attention_mask
-        )
-        (query_layer,) = adjust_tensors_for_parallel(key_layer, query_layer)
+        # key_layer, value_layer, attention_mask = self.prefix_tuning(
+        #     key_layer, value_layer, hidden_states, attention_mask
+        # )
+        # (query_layer,) = adjust_tensors_for_parallel(key_layer, query_layer)
         # end of code for prefix tuning
 
         # [batch_size * num_heads, q_length, kv_length]
@@ -823,10 +823,10 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
                 )
 
             hidden_states = outputs[0]
-            (attention_mask,) = adjust_tensors_for_parallel(hidden_states, attention_mask)
-            # also adjust output shape if necessary
-            if getattr(ForwardContext.get_context(), "adapters_parallelized", False):
-                output_shape = hidden_states.size()
+            # (attention_mask,) = adjust_tensors_for_parallel(hidden_states, attention_mask)
+            # # also adjust output shape if necessary
+            # if getattr(ForwardContext.get_context(), "adapters_parallelized", False):
+            #     output_shape = hidden_states.size()
 
             if use_cache is True:
                 presents = presents + (outputs[1],)
@@ -836,8 +836,8 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
 
         hidden_states = self.ln_f(hidden_states)
 
-        # new line for parallelized adapters
-        hidden_states = hidden_states.view(output_shape)
+        # # new line for parallelized adapters
+        # hidden_states = hidden_states.view(output_shape)
 
         # Add last hidden state
         if output_hidden_states:
