@@ -24,17 +24,18 @@ from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, LayerNorm, MSELoss
 from torch.nn import functional as F
 
-from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward
 from ...adapters.composition import adjust_tensors_for_parallel
 from ...adapters.context import ForwardContext
 from ...adapters.lora import Linear as LoRALinear
 from ...adapters.lora import MergedLinear as LoRAMergedLinear
 from ...adapters.mixins.bloom import (
-    BloomDecoderBlockAdaptersMixin, 
-    BloomModelAdapterMixin, 
+    BloomDecoderBlockAdaptersMixin,
+    BloomModelAdapterMixin,
     BloomModelWithHeadsAdaptersMixin,
 )
 from ...adapters.model_mixin import ModelWithHeadsAdaptersMixin
+from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward
+
 # from ...adapters.prefix_tuning import PrefixTuningShim
 from ...modeling_outputs import (
     BaseModelOutputWithPastAndCrossAttentions,
@@ -243,13 +244,7 @@ class BloomAttention(nn.Module):
         self.inv_norm_factor = 1.0 / math.sqrt(self.head_dim)
         self.beta = 1.0
 
-        self.query_key_value = LoRAMergedLinear(
-                self.hidden_size,
-                3 * self.hidden_size,
-                "selfattn",
-                config,
-                bias=True
-        )
+        self.query_key_value = LoRAMergedLinear(self.hidden_size, 3 * self.hidden_size, "selfattn", config, bias=True)
         self.dense = nn.Linear(self.hidden_size, self.hidden_size)
         self.attention_dropout = nn.Dropout(config.attention_dropout)
 
@@ -782,12 +777,10 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
         )
 
         for i, (block, layer_past) in enumerate(zip(self.h, past_key_values)):
-
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
             if self.gradient_checkpointing and self.training:
-
                 if use_cache:
                     logger.warning(
                         "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
