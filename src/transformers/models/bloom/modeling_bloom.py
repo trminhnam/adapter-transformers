@@ -28,11 +28,13 @@ from torch.nn import functional as F
 from ...adapters.context import ForwardContext
 from ...adapters.lora import Linear as LoRALinear
 from ...adapters.lora import MergedLinear as LoRAMergedLinear
-from ...adapters.mixins.bloom import (  # BloomModelWithHeadsAdaptersMixin,
+from ...adapters.mixins.bloom import (
     BloomDecoderBlockAdaptersMixin,
     BloomModelAdapterMixin,
+    BloomModelWithHeadsAdaptersMixin,
 )
-from ...adapters.model_mixin import ModelWithHeadsAdaptersMixin
+
+# from ...adapters.model_mixin import ModelWithHeadsAdaptersMixin
 from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward
 
 # from ...adapters.prefix_tuning import PrefixTuningShim
@@ -842,7 +844,7 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForCausalLM(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForCausalLM(BloomModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -1000,7 +1002,7 @@ class BloomForCausalLM(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForSequenceClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForSequenceClassification(BloomModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -1129,7 +1131,7 @@ class BloomForSequenceClassification(ModelWithHeadsAdaptersMixin, BloomPreTraine
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForTokenClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForTokenClassification(BloomModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -1231,7 +1233,7 @@ class BloomForTokenClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedMo
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForQuestionAnswering(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForQuestionAnswering(BloomModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config):
