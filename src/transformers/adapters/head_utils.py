@@ -519,7 +519,7 @@ STATIC_TO_FLEX_HEAD_MAP = {
         },
         "layers": [None, "score"],
     },
-    "BloomLMHeadModel": {
+    "BloomForCausalLM": {
         "config": {
             "head_type": "causal_lm",
         },
@@ -532,6 +532,14 @@ STATIC_TO_FLEX_HEAD_MAP = {
             "activation_function": None,
         },
         "layers": [None, "classifier"],
+    },
+    "BloomForQuestionAnswering": {
+        "config": {
+            "head_type": "question_answering",
+            "layers": 1,
+            "activation_function": None,
+        },
+        "layers": [None, "qa_outputs"],
     },
 }
 
