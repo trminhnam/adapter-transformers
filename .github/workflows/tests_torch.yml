@@ -82,6 +82,7 @@ jobs:
                   pip install torch==1.12.1
                   pip install .[sklearn,testing,sentencepiece,vision]
                   pip install datasets
+                  pip install --upgrade --force-reinstall deeplabcut
             - name: Test
               run: |
                   make test-adapter-models
