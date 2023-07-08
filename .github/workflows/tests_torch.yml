@@ -11,7 +11,7 @@ on:
             - "tests_adapters/**"
             - "utils/**"
     pull_request:
-        branches: ["master", "develop", "add-adapter-to-bloom"]
+        branches: ["master", "develop", "add-adapter-to-bloom", "dev-bloom"]
         paths:
             - "src/**"
             - "examples/**"

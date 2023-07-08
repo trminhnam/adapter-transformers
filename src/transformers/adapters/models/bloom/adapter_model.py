@@ -188,17 +188,6 @@ class BloomAdapterModel(EmbeddingAdaptersWrapperMixin, ModelWithFlexibleHeadsAda
     def add_qa_head(
         self, head_name, num_labels=2, layers=1, activation_function="tanh", overwrite_ok=False, id2label=None
     ):
-        """
-
-
-        Args:
-            head_name (_type_): _description_
-            num_labels (int, optional): _description_. Defaults to 2.
-            layers (int, optional): _description_. Defaults to 1.
-            activation_function (str, optional): _description_. Defaults to "tanh".
-            overwrite_ok (bool, optional): _description_. Defaults to False.
-            id2label (_type_, optional): _description_. Defaults to None.
-        """
         head = QuestionAnsweringHead(self, head_name, num_labels, layers, activation_function, id2label)
         self.add_prediction_head(head, overwrite_ok)
 
