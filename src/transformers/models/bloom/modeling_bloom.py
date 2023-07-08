@@ -330,10 +330,10 @@ class BloomAttention(nn.Module):
             present = None
 
         # TODO: Add for adapter forward
-        key_layer, value_layer, attention_mask = self.prefix_tuning(
-            key_layer, value_layer, hidden_states, attention_mask
-        )
-        (query_layer,) = adjust_tensors_for_parallel(key_layer, query_layer)
+        # key_layer, value_layer, attention_mask = self.prefix_tuning(
+        #     key_layer, value_layer, hidden_states, attention_mask
+        # )
+        # (query_layer,) = adjust_tensors_for_parallel(key_layer, query_layer)
 
         # [batch_size * num_heads, q_length, kv_length]
         # we use `torch.Tensor.baddbmm` instead of `torch.baddbmm` as the latter isn't supported by TorchScript v1.11
@@ -763,8 +763,8 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
         inputs_embeds = self.invertible_adapters_forward(inputs_embeds)
         hidden_states = self.word_embeddings_layernorm(inputs_embeds)
 
-        # TODO: Add for adapter forward
-        output_shape = (batch_size, seq_length) + (hidden_states.size(-1),)
+        # # TODO: Add for adapter forward
+        # output_shape = (batch_size, seq_length) + (hidden_states.size(-1),)
 
         presents = () if use_cache else None
         all_self_attentions = () if output_attentions else None
@@ -827,11 +827,11 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
 
             hidden_states = outputs[0]
 
-            # TODO: Add for adapter forward
-            (causal_mask,) = adjust_tensors_for_parallel(hidden_states, causal_mask)
-            # also adjust output shape if necessary
-            if getattr(ForwardContext.get_context(), "adapters_parallelized", False):
-                output_shape = hidden_states.size()
+            # # TODO: Add for adapter forward
+            # (causal_mask,) = adjust_tensors_for_parallel(hidden_states, causal_mask)
+            # # also adjust output shape if necessary
+            # if getattr(ForwardContext.get_context(), "adapters_parallelized", False):
+            #     output_shape = hidden_states.size()
 
             if use_cache is True:
                 presents = presents + (outputs[1],)
@@ -842,8 +842,8 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
         # Add last hidden state
         hidden_states = self.ln_f(hidden_states)
 
-        # TODO: Add for adapter forward
-        hidden_states = hidden_states.view(output_shape)
+        # # TODO: Add for adapter forward
+        # hidden_states = hidden_states.view(output_shape)
 
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
