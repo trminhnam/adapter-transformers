@@ -329,9 +329,9 @@ class BloomAttention(nn.Module):
         else:
             present = None
 
-        key_layer, value_layer, attention_mask = self.prefix_tuning(
-            key_layer, value_layer, hidden_states, attention_mask
-        )
+        # key_layer, value_layer, attention_mask = self.prefix_tuning(
+        #     key_layer, value_layer, hidden_states, attention_mask
+        # )
 
         # [batch_size * num_heads, q_length, kv_length]
         # we use `torch.Tensor.baddbmm` instead of `torch.baddbmm` as the latter isn't supported by TorchScript v1.11
