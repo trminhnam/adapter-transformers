@@ -51,12 +51,8 @@ class BloomAdapterModel(EmbeddingAdaptersWrapperMixin, ModelWithFlexibleHeadsAda
         input_ids=None,
         past_key_values=None,
         attention_mask=None,
-        token_type_ids=None,
-        position_ids=None,
         head_mask=None,
         inputs_embeds=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
         use_cache=None,
         output_attentions=None,
         output_hidden_states=None,
@@ -72,12 +68,8 @@ class BloomAdapterModel(EmbeddingAdaptersWrapperMixin, ModelWithFlexibleHeadsAda
             input_ids,
             past_key_values=past_key_values,
             attention_mask=attention_mask,
-            token_type_ids=token_type_ids,
-            position_ids=position_ids,
             head_mask=head_mask,
             inputs_embeds=inputs_embeds,
-            encoder_hidden_states=encoder_hidden_states,
-            encoder_attention_mask=encoder_attention_mask,
             use_cache=use_cache,
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
@@ -194,15 +186,36 @@ class BloomAdapterModel(EmbeddingAdaptersWrapperMixin, ModelWithFlexibleHeadsAda
         self.add_prediction_head(head, overwrite_ok=overwrite_ok)
 
     def add_qa_head(
-        self,
-        head_name,
-        num_labels=2,
-        layers=1,
-        activation_function="tanh",
-        overwrite_ok=False,
-        id2label=None,
+        self, head_name, num_labels=2, layers=1, activation_function="tanh", overwrite_ok=False, id2label=None
     ):
+        """
+
+
+        Args:
+            head_name (_type_): _description_
+            num_labels (int, optional): _description_. Defaults to 2.
+            layers (int, optional): _description_. Defaults to 1.
+            activation_function (str, optional): _description_. Defaults to "tanh".
+            overwrite_ok (bool, optional): _description_. Defaults to False.
+            id2label (_type_, optional): _description_. Defaults to None.
+        """
         head = QuestionAnsweringHead(self, head_name, num_labels, layers, activation_function, id2label)
+        self.add_prediction_head(head, overwrite_ok)
+
+    def add_tagging_head(
+        self, head_name, num_labels=2, layers=1, activation_function="tanh", overwrite_ok=False, id2label=None
+    ):
+        """
+        Adds a token classification head on top of the model.
+
+        Args:
+            head_name (str): The name of the head.
+            num_labels (int, optional): Number of classification labels. Defaults to 2.
+            layers (int, optional): Number of layers. Defaults to 1.
+            activation_function (str, optional): Activation function. Defaults to 'tanh'.
+            overwrite_ok (bool, optional): Force overwrite if a head with the same name exists. Defaults to False.
+        """
+        head = TaggingHead(self, head_name, num_labels, layers, activation_function, id2label)
         self.add_prediction_head(head, overwrite_ok)
 
 
