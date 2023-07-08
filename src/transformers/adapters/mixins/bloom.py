@@ -24,8 +24,11 @@ class BloomDecoderBlockAdaptersMixin:
 
 
 class BloomModelAdapterMixin(EmbeddingAdaptersMixin, InvertibleAdaptersMixin, ModelAdaptersMixin):
+    # def iter_layers(self) -> Iterable[Tuple[int, nn.Module]]:
+    #     for i, layer in enumerate(self.base_model.h):
+    #         yield i, layer
     def iter_layers(self) -> Iterable[Tuple[int, nn.Module]]:
-        for i, layer in enumerate(self.base_model.h):
+        for i, layer in enumerate(self.h):
             yield i, layer
 
 
