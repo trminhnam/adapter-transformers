@@ -25,8 +25,13 @@ class BloomDecoderBlockAdaptersMixin:
 
 class BloomModelAdapterMixin(EmbeddingAdaptersMixin, InvertibleAdaptersMixin, ModelAdaptersMixin):
     def iter_layers(self) -> Iterable[Tuple[int, nn.Module]]:
-        for i, layer in enumerate(self.base_model.h):
-            yield i, layer
+        if hasattr(self, "base_model"):
+            for i, layer in enumerate(self.base_model.h):
+                yield i, layer
+        else:
+            for i, layer in enumerate(self.h):
+                yield i, layer
+
 
 class BloomModelWithHeadsAdaptersMixin(EmbeddingAdaptersWrapperMixin, ModelWithHeadsAdaptersMixin):
     pass
