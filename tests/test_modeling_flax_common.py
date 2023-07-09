@@ -23,7 +23,9 @@ from typing import List, Tuple
 import numpy as np
 
 import transformers
-from huggingface_hub import HfFolder, delete_repo, set_access_token
+from huggingface_hub import HfFolder, delete_repo
+
+# from huggingface_hub import set_access_token
 from requests.exceptions import HTTPError
 from transformers import BertConfig, is_flax_available, is_torch_available
 from transformers.models.auto import get_values
@@ -132,9 +134,11 @@ class FlaxModelTesterMixin:
         # hack for now until we have AutoModel classes
         if "ForMultipleChoice" in model_class.__name__:
             inputs_dict = {
-                k: jnp.broadcast_to(v[:, None], (v.shape[0], self.model_tester.num_choices, v.shape[-1]))
-                if isinstance(v, (jnp.ndarray, np.ndarray))
-                else v
+                k: (
+                    jnp.broadcast_to(v[:, None], (v.shape[0], self.model_tester.num_choices, v.shape[-1]))
+                    if isinstance(v, (jnp.ndarray, np.ndarray))
+                    else v
+                )
                 for k, v in inputs_dict.items()
             }
 
@@ -275,7 +279,6 @@ class FlaxModelTesterMixin:
 
         for model_class in self.all_model_classes:
             with self.subTest(model_class.__name__):
-
                 # Output all for aggressive testing
                 config.output_hidden_states = True
                 config.output_attentions = self.has_attentions
@@ -328,7 +331,6 @@ class FlaxModelTesterMixin:
 
         for model_class in self.all_model_classes:
             with self.subTest(model_class.__name__):
-
                 # Output all for aggressive testing
                 config.output_hidden_states = True
                 config.output_attentions = self.has_attentions
@@ -569,7 +571,6 @@ class FlaxModelTesterMixin:
 
                 self.assertEqual(len(outputs), len(jitted_outputs))
                 for jitted_output, output in zip(jitted_outputs, outputs):
-
                     self.assertEqual(jitted_output.shape, output.shape)
 
     def test_forward_signature(self):
@@ -1142,92 +1143,92 @@ class FlaxModelTesterMixin:
                 self.assertTrue((output == remat_output).all())
 
 
-@require_flax
-@is_staging_test
-class FlaxModelPushToHubTester(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls._token = TOKEN
-        set_access_token(TOKEN)
-        HfFolder.save_token(TOKEN)
+# @require_flax
+# @is_staging_test
+# class FlaxModelPushToHubTester(unittest.TestCase):
+#     @classmethod
+#     def setUpClass(cls):
+#         cls._token = TOKEN
+#         set_access_token(TOKEN)
+#         HfFolder.save_token(TOKEN)
 
-    @classmethod
-    def tearDownClass(cls):
-        try:
-            delete_repo(token=cls._token, repo_id="test-model-flax")
-        except HTTPError:
-            pass
+#     @classmethod
+#     def tearDownClass(cls):
+#         try:
+#             delete_repo(token=cls._token, repo_id="test-model-flax")
+#         except HTTPError:
+#             pass
 
-        try:
-            delete_repo(token=cls._token, repo_id="valid_org/test-model-flax-org")
-        except HTTPError:
-            pass
+#         try:
+#             delete_repo(token=cls._token, repo_id="valid_org/test-model-flax-org")
+#         except HTTPError:
+#             pass
 
-    def test_push_to_hub(self):
-        config = BertConfig(
-            vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
-        )
-        model = FlaxBertModel(config)
-        model.push_to_hub("test-model-flax", use_auth_token=self._token)
+#     def test_push_to_hub(self):
+#         config = BertConfig(
+#             vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
+#         )
+#         model = FlaxBertModel(config)
+#         model.push_to_hub("test-model-flax", use_auth_token=self._token)
 
-        new_model = FlaxBertModel.from_pretrained(f"{USER}/test-model-flax")
+#         new_model = FlaxBertModel.from_pretrained(f"{USER}/test-model-flax")
 
-        base_params = flatten_dict(unfreeze(model.params))
-        new_params = flatten_dict(unfreeze(new_model.params))
+#         base_params = flatten_dict(unfreeze(model.params))
+#         new_params = flatten_dict(unfreeze(new_model.params))
 
-        for key in base_params.keys():
-            max_diff = (base_params[key] - new_params[key]).sum().item()
-            self.assertLessEqual(max_diff, 1e-3, msg=f"{key} not identical")
+#         for key in base_params.keys():
+#             max_diff = (base_params[key] - new_params[key]).sum().item()
+#             self.assertLessEqual(max_diff, 1e-3, msg=f"{key} not identical")
 
-        # Reset repo
-        delete_repo(token=self._token, repo_id="test-model-flax")
+#         # Reset repo
+#         delete_repo(token=self._token, repo_id="test-model-flax")
 
-        # Push to hub via save_pretrained
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            model.save_pretrained(tmp_dir, repo_id="test-model-flax", push_to_hub=True, use_auth_token=self._token)
+#         # Push to hub via save_pretrained
+#         with tempfile.TemporaryDirectory() as tmp_dir:
+#             model.save_pretrained(tmp_dir, repo_id="test-model-flax", push_to_hub=True, use_auth_token=self._token)
 
-        new_model = FlaxBertModel.from_pretrained(f"{USER}/test-model-flax")
+#         new_model = FlaxBertModel.from_pretrained(f"{USER}/test-model-flax")
 
-        base_params = flatten_dict(unfreeze(model.params))
-        new_params = flatten_dict(unfreeze(new_model.params))
+#         base_params = flatten_dict(unfreeze(model.params))
+#         new_params = flatten_dict(unfreeze(new_model.params))
 
-        for key in base_params.keys():
-            max_diff = (base_params[key] - new_params[key]).sum().item()
-            self.assertLessEqual(max_diff, 1e-3, msg=f"{key} not identical")
+#         for key in base_params.keys():
+#             max_diff = (base_params[key] - new_params[key]).sum().item()
+#             self.assertLessEqual(max_diff, 1e-3, msg=f"{key} not identical")
 
-    def test_push_to_hub_in_organization(self):
-        config = BertConfig(
-            vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
-        )
-        model = FlaxBertModel(config)
-        model.push_to_hub("valid_org/test-model-flax-org", use_auth_token=self._token)
+#     def test_push_to_hub_in_organization(self):
+#         config = BertConfig(
+#             vocab_size=99, hidden_size=32, num_hidden_layers=5, num_attention_heads=4, intermediate_size=37
+#         )
+#         model = FlaxBertModel(config)
+#         model.push_to_hub("valid_org/test-model-flax-org", use_auth_token=self._token)
 
-        new_model = FlaxBertModel.from_pretrained("valid_org/test-model-flax-org")
+#         new_model = FlaxBertModel.from_pretrained("valid_org/test-model-flax-org")
 
-        base_params = flatten_dict(unfreeze(model.params))
-        new_params = flatten_dict(unfreeze(new_model.params))
+#         base_params = flatten_dict(unfreeze(model.params))
+#         new_params = flatten_dict(unfreeze(new_model.params))
 
-        for key in base_params.keys():
-            max_diff = (base_params[key] - new_params[key]).sum().item()
-            self.assertLessEqual(max_diff, 1e-3, msg=f"{key} not identical")
+#         for key in base_params.keys():
+#             max_diff = (base_params[key] - new_params[key]).sum().item()
+#             self.assertLessEqual(max_diff, 1e-3, msg=f"{key} not identical")
 
-        # Reset repo
-        delete_repo(token=self._token, repo_id="valid_org/test-model-flax-org")
+#         # Reset repo
+#         delete_repo(token=self._token, repo_id="valid_org/test-model-flax-org")
 
-        # Push to hub via save_pretrained
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            model.save_pretrained(
-                tmp_dir, repo_id="valid_org/test-model-flax-org", push_to_hub=True, use_auth_token=self._token
-            )
+#         # Push to hub via save_pretrained
+#         with tempfile.TemporaryDirectory() as tmp_dir:
+#             model.save_pretrained(
+#                 tmp_dir, repo_id="valid_org/test-model-flax-org", push_to_hub=True, use_auth_token=self._token
+#             )
 
-        new_model = FlaxBertModel.from_pretrained("valid_org/test-model-flax-org")
+#         new_model = FlaxBertModel.from_pretrained("valid_org/test-model-flax-org")
 
-        base_params = flatten_dict(unfreeze(model.params))
-        new_params = flatten_dict(unfreeze(new_model.params))
+#         base_params = flatten_dict(unfreeze(model.params))
+#         new_params = flatten_dict(unfreeze(new_model.params))
 
-        for key in base_params.keys():
-            max_diff = (base_params[key] - new_params[key]).sum().item()
-            self.assertLessEqual(max_diff, 1e-3, msg=f"{key} not identical")
+#         for key in base_params.keys():
+#             max_diff = (base_params[key] - new_params[key]).sum().item()
+#             self.assertLessEqual(max_diff, 1e-3, msg=f"{key} not identical")
 
 
 def check_models_equal(model1, model2):

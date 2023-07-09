@@ -29,7 +29,9 @@ from typing import List, Tuple, get_type_hints
 
 from datasets import Dataset
 
-from huggingface_hub import HfFolder, Repository, delete_repo, set_access_token
+from huggingface_hub import HfFolder, Repository, delete_repo
+
+# from huggingface_hub import set_access_token
 from huggingface_hub.file_download import http_get
 from requests.exceptions import HTTPError
 from transformers import is_tf_available, is_torch_available
@@ -157,7 +159,6 @@ def _return_type_has_loss(model):
 
 @require_tf
 class TFModelTesterMixin:
-
     model_tester = None
     all_model_classes = ()
     all_generative_model_classes = ()
@@ -172,9 +173,11 @@ class TFModelTesterMixin:
 
         if model_class in get_values(TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING):
             inputs_dict = {
-                k: tf.tile(tf.expand_dims(v, 1), (1, self.model_tester.num_choices) + (1,) * (v.ndim - 1))
-                if isinstance(v, tf.Tensor) and v.ndim > 0
-                else v
+                k: (
+                    tf.tile(tf.expand_dims(v, 1), (1, self.model_tester.num_choices) + (1,) * (v.ndim - 1))
+                    if isinstance(v, tf.Tensor) and v.ndim > 0
+                    else v
+                )
                 for k, v in inputs_dict.items()
             }
 
@@ -618,7 +621,6 @@ class TFModelTesterMixin:
             )
 
     def prepare_pt_inputs_from_tf_inputs(self, tf_inputs_dict):
-
         pt_inputs_dict = {}
         for name, key in tf_inputs_dict.items():
             if type(key) == bool:
@@ -638,7 +640,6 @@ class TFModelTesterMixin:
         return pt_inputs_dict
 
     def check_pt_tf_models(self, tf_model, pt_model, tf_inputs_dict):
-
         pt_inputs_dict = self.prepare_pt_inputs_from_tf_inputs(tf_inputs_dict)
 
         # send pytorch inputs to the correct device
@@ -670,7 +671,6 @@ class TFModelTesterMixin:
         import transformers
 
         for model_class in self.all_model_classes:
-
             config, inputs_dict = self.model_tester.prepare_config_and_inputs_for_common()
 
             # Output all for aggressive testing
@@ -1069,7 +1069,6 @@ class TFModelTesterMixin:
             self.assertLessEqual(max_diff, 1e-5)
 
     def test_model_outputs_equivalence(self):
-
         config, inputs_dict = self.model_tester.prepare_config_and_inputs_for_common()
 
         def check_equivalence(model, tuple_inputs, dict_inputs, additional_kwargs={}):
