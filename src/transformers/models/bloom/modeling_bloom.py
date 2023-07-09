@@ -330,9 +330,9 @@ class BloomAttention(nn.Module):
             present = None
 
         # TODO: Add for adapter forward
-        # key_layer, value_layer, attention_mask = self.prefix_tuning(
-        #     key_layer, value_layer, hidden_states, attention_mask
-        # )
+        key_layer, value_layer, attention_mask = self.prefix_tuning(
+            key_layer, value_layer, hidden_states, attention_mask
+        )
         # (query_layer,) = adjust_tensors_for_parallel(key_layer, query_layer)
 
         # [batch_size * num_heads, q_length, kv_length]
