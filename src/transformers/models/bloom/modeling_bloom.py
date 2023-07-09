@@ -248,6 +248,9 @@ class BloomAttention(nn.Module):
         self.dense = nn.Linear(self.hidden_size, self.hidden_size)
         self.attention_dropout = nn.Dropout(config.attention_dropout)
 
+        # location_key = "cross_prefix" if self.is_cross_attention else "self_prefix"
+        # self.prefix_tuning = PrefixTuningShim(location_key, config)
+
     def _split_heads(self, fused_qkv: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Split the last dimension into (num_heads, head_dim) without making any copies, results share same memory
@@ -843,7 +846,7 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForCausalLM(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForCausalLM(BloomModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -1001,7 +1004,7 @@ class BloomForCausalLM(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForSequenceClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForSequenceClassification(BloomModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -1130,7 +1133,7 @@ class BloomForSequenceClassification(ModelWithHeadsAdaptersMixin, BloomPreTraine
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForTokenClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForTokenClassification(BloomModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config: BloomConfig):
@@ -1232,7 +1235,7 @@ class BloomForTokenClassification(ModelWithHeadsAdaptersMixin, BloomPreTrainedMo
     """,
     BLOOM_START_DOCSTRING,
 )
-class BloomForQuestionAnswering(ModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
+class BloomForQuestionAnswering(BloomModelWithHeadsAdaptersMixin, BloomPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"h.*.self_attention.scale_mask_softmax.causal_mask", r"lm_head.weight"]
 
     def __init__(self, config):

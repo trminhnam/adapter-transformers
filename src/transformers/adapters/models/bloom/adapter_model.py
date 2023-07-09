@@ -5,7 +5,6 @@ import torch
 
 # from ....models.gpt2.modeling_gpt2 import GPT2_START_DOCSTRING, GPT2Model, GPT2PreTrainedModel
 from ....models.bloom.modeling_bloom import BLOOM_START_DOCSTRING, BloomModel, BloomPreTrainedModel
-
 from ....utils import add_start_docstrings
 from ...composition import adjust_tensors_for_parallel
 from ...heads import (
@@ -13,6 +12,7 @@ from ...heads import (
     ClassificationHead,
     ModelWithFlexibleHeadsAdaptersMixin,
     MultiLabelClassificationHead,
+    QuestionAnsweringHead,
     TaggingHead,
 )
 from ...model_mixin import EmbeddingAdaptersWrapperMixin
@@ -51,12 +51,8 @@ class BloomAdapterModel(EmbeddingAdaptersWrapperMixin, ModelWithFlexibleHeadsAda
         input_ids=None,
         past_key_values=None,
         attention_mask=None,
-        token_type_ids=None,
-        position_ids=None,
         head_mask=None,
         inputs_embeds=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
         use_cache=None,
         output_attentions=None,
         output_hidden_states=None,
@@ -72,12 +68,8 @@ class BloomAdapterModel(EmbeddingAdaptersWrapperMixin, ModelWithFlexibleHeadsAda
             input_ids,
             past_key_values=past_key_values,
             attention_mask=attention_mask,
-            token_type_ids=token_type_ids,
-            position_ids=position_ids,
             head_mask=head_mask,
             inputs_embeds=inputs_embeds,
-            encoder_hidden_states=encoder_hidden_states,
-            encoder_attention_mask=encoder_attention_mask,
             use_cache=use_cache,
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
@@ -151,6 +143,7 @@ class BloomAdapterModel(EmbeddingAdaptersWrapperMixin, ModelWithFlexibleHeadsAda
         "multilabel_classification": MultiLabelClassificationHead,
         "causal_lm": CausalLMHead,
         "tagging": TaggingHead,
+        "question_answering": QuestionAnsweringHead,
     }
 
     def add_classification_head(
@@ -191,6 +184,28 @@ class BloomAdapterModel(EmbeddingAdaptersWrapperMixin, ModelWithFlexibleHeadsAda
         """
         head = CausalLMHead(self, head_name)
         self.add_prediction_head(head, overwrite_ok=overwrite_ok)
+
+    def add_qa_head(
+        self, head_name, num_labels=2, layers=1, activation_function="tanh", overwrite_ok=False, id2label=None
+    ):
+        head = QuestionAnsweringHead(self, head_name, num_labels, layers, activation_function, id2label)
+        self.add_prediction_head(head, overwrite_ok)
+
+    def add_tagging_head(
+        self, head_name, num_labels=2, layers=1, activation_function="tanh", overwrite_ok=False, id2label=None
+    ):
+        """
+        Adds a token classification head on top of the model.
+
+        Args:
+            head_name (str): The name of the head.
+            num_labels (int, optional): Number of classification labels. Defaults to 2.
+            layers (int, optional): Number of layers. Defaults to 1.
+            activation_function (str, optional): Activation function. Defaults to 'tanh'.
+            overwrite_ok (bool, optional): Force overwrite if a head with the same name exists. Defaults to False.
+        """
+        head = TaggingHead(self, head_name, num_labels, layers, activation_function, id2label)
+        self.add_prediction_head(head, overwrite_ok)
 
 
 # class GPT2ModelWithHeads(GPT2AdapterModel):
