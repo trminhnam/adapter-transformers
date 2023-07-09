@@ -33,10 +33,11 @@ from ...adapters.mixins.bloom import (
     BloomModelAdapterMixin,
     BloomModelWithHeadsAdaptersMixin,
 )
-from ...adapters.model_mixin import ModelWithHeadsAdaptersMixin
+
+# from ...adapters.model_mixin import ModelWithHeadsAdaptersMixin
 from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward
 
-# from ...adapters.prefix_tuning import PrefixTuningShim
+from ...adapters.prefix_tuning import PrefixTuningShim
 from ...modeling_outputs import (
     BaseModelOutputWithPastAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
@@ -248,8 +249,8 @@ class BloomAttention(nn.Module):
         self.dense = nn.Linear(self.hidden_size, self.hidden_size)
         self.attention_dropout = nn.Dropout(config.attention_dropout)
 
-        # location_key = "cross_prefix" if self.is_cross_attention else "self_prefix"
-        # self.prefix_tuning = PrefixTuningShim(location_key, config)
+        location_key = "self_prefix"  # "cross_prefix" if self.is_cross_attention else "self_prefix"
+        self.prefix_tuning = PrefixTuningShim(location_key, config)
 
     def _split_heads(self, fused_qkv: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
@@ -327,6 +328,12 @@ class BloomAttention(nn.Module):
             present = (key_layer, value_layer)
         else:
             present = None
+
+        # TODO: Add for adapter forward
+        key_layer, value_layer, attention_mask = self.prefix_tuning(
+            key_layer, value_layer, hidden_states, attention_mask
+        )
+        # (query_layer,) = adjust_tensors_for_parallel(key_layer, query_layer)
 
         # [batch_size * num_heads, q_length, kv_length]
         # we use `torch.Tensor.baddbmm` instead of `torch.baddbmm` as the latter isn't supported by TorchScript v1.11
@@ -756,6 +763,9 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
         inputs_embeds = self.invertible_adapters_forward(inputs_embeds)
         hidden_states = self.word_embeddings_layernorm(inputs_embeds)
 
+        # # TODO: Add for adapter forward
+        # output_shape = (batch_size, seq_length) + (hidden_states.size(-1),)
+
         presents = () if use_cache else None
         all_self_attentions = () if output_attentions else None
         all_hidden_states = () if output_hidden_states else None
@@ -816,6 +826,13 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
                 )
 
             hidden_states = outputs[0]
+
+            # # TODO: Add for adapter forward
+            # (causal_mask,) = adjust_tensors_for_parallel(hidden_states, causal_mask)
+            # # also adjust output shape if necessary
+            # if getattr(ForwardContext.get_context(), "adapters_parallelized", False):
+            #     output_shape = hidden_states.size()
+
             if use_cache is True:
                 presents = presents + (outputs[1],)
 
@@ -824,6 +841,9 @@ class BloomModel(BloomModelAdapterMixin, BloomPreTrainedModel):
 
         # Add last hidden state
         hidden_states = self.ln_f(hidden_states)
+
+        # # TODO: Add for adapter forward
+        # hidden_states = hidden_states.view(output_shape)
 
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
@@ -1240,8 +1260,10 @@ class BloomForQuestionAnswering(BloomModelWithHeadsAdaptersMixin, BloomPreTraine
 
     def __init__(self, config):
         super().__init__(config)
+        self.num_labels = 2  # config.num_labels
+
         self.transformer = BloomModel(config)
-        self.qa_outputs = nn.Linear(config.hidden_size, 2)
+        self.qa_outputs = nn.Linear(config.hidden_size, self.num_labels)
 
         # Initialize weights and apply final processing
         self.post_init()
