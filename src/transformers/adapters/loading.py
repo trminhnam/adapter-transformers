@@ -1,7 +1,7 @@
 import json
 import logging
 from abc import ABC, abstractmethod
-from os import mkdir
+from os import mkdir, makedirs
 from os.path import exists, isdir, isfile, join
 from typing import Callable, Mapping, Sequence, Tuple
 
@@ -61,7 +61,8 @@ class WeightsLoaderHelper:
 
     def save_weights(self, save_directory, filter_func):
         if not exists(save_directory):
-            mkdir(save_directory)
+            # mkdir(save_directory)
+            makedirs(save_directory, exist_ok=True)
         else:
             assert isdir(save_directory), "Saving path should be a directory where the module weights can be saved."
 
@@ -232,7 +233,8 @@ class WeightsLoader(ABC):
             name (str): An identifier of the weights to be saved. The details are specified by the implementor.
         """
         if not exists(save_directory):
-            mkdir(save_directory)
+            # mkdir(save_directory)
+            makedirs(save_directory, exist_ok=True)
         else:
             assert isdir(
                 save_directory
@@ -363,7 +365,8 @@ class AdapterLoader(WeightsLoader):
             task_name (str): the name of the adapter to be saved
         """
         if not exists(save_directory):
-            mkdir(save_directory)
+            # mkdir(save_directory)
+            makedirs(save_directory, exist_ok=True)
         else:
             assert isdir(
                 save_directory
@@ -501,7 +504,8 @@ class AdapterFusionLoader(WeightsLoader):
                 return
 
         if not exists(save_directory):
-            mkdir(save_directory)
+            # mkdir(save_directory)
+            makedirs(save_directory, exist_ok=True)
         else:
             assert isdir(save_directory), "Saving path should be a directory where the head can be saved."
 
@@ -624,7 +628,8 @@ class PredictionHeadLoader(WeightsLoader):
                 # -> ignore the name and go on
                 name = None
         if not exists(save_directory):
-            mkdir(save_directory)
+            # mkdir(save_directory)
+            makedirs(save_directory, exist_ok=True)
         else:
             assert isdir(save_directory), "Saving path should be a directory where the head can be saved."
 
